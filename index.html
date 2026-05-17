@@ -105,6 +105,8 @@
       font-weight:900;
       letter-spacing:.4px;
       text-transform:uppercase;
+      text-decoration:none;
+      color:inherit;
     }
     .brand-mark{
       width:46px;
@@ -115,8 +117,15 @@
       background:linear-gradient(135deg, rgba(55,216,255,.2), rgba(51,240,165,.14));
       border:1px solid rgba(255,255,255,.12);
       box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 10px 30px rgba(0,0,0,.3);
+      overflow:hidden;
+      flex:0 0 auto;
     }
-    .brand-mark svg{width:28px;height:28px}
+    .brand-mark img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
     .brand span{font-size:1.15rem}
     .brand .accent{color:var(--accent)}
 
@@ -410,9 +419,7 @@
       font-size:.95rem;
     }
     .field .subtext{color:var(--muted);font-size:.88rem;font-weight:500}
-    select, input[type="range"]{
-      width:100%;
-    }
+    select, input[type="range"]{width:100%}
     select{
       appearance:none;
       -webkit-appearance:none;
@@ -618,21 +625,17 @@
 
   <header class="topbar">
     <div class="wrap nav">
-      <div class="brand" aria-label="HDX-CLOUD logo">
+      <a class="brand" href="#top" aria-label="HDX-CLOUD logo">
         <div class="brand-mark">
-          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M12 46L27 16h11L23 46H12Z" fill="#ffffff"/>
-            <path d="M25 46L40 16h12L36 46H25Z" fill="#37d8ff"/>
-            <path d="M43 20l9 26h-9l-3-9h-7l5-8h2l-2-7h5Z" fill="#33f0a5"/>
-          </svg>
+          <img src="logo.png" alt="HDX-CLOUD Logo">
         </div>
         <span><span class="accent">HDX</span>-CLOUD</span>
-      </div>
+      </a>
       <button class="menu-btn" aria-label="Open menu"><i></i></button>
     </div>
   </header>
 
-  <main class="wrap">
+  <main class="wrap" id="top">
     <section class="hero">
       <div class="reveal">
         <div class="eyebrow"><span class="dot"></span> Free Minecraft hosting for everyone</div>
