@@ -1,0 +1,733 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HDX-CLOUD — Minecraft Hosting</title>
+  <style>
+    :root {
+      --bg: #070816;
+      --bg2: #0b1025;
+      --card: rgba(11, 16, 37, 0.72);
+      --card2: rgba(14, 21, 48, 0.82);
+      --stroke: rgba(123, 196, 255, 0.18);
+      --text: #eef4ff;
+      --muted: rgba(238, 244, 255, 0.72);
+      --accent: #39d98a;
+      --accent2: #35c8ff;
+      --accent3: #8f6bff;
+      --danger: #ff5b6b;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+      --radius: 26px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(1200px 600px at 20% 0%, rgba(53, 200, 255, .16), transparent 45%),
+        radial-gradient(900px 500px at 90% 15%, rgba(143, 107, 255, .17), transparent 40%),
+        linear-gradient(180deg, #070816 0%, #090b18 35%, #05060f 100%);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size: 58px 58px;
+      mask-image: radial-gradient(circle at center, black 35%, transparent 100%);
+      pointer-events: none;
+      opacity: .2;
+    }
+
+    .wrap {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(14px);
+      background: linear-gradient(180deg, rgba(7, 8, 22, .92), rgba(7, 8, 22, .62));
+      border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+    }
+
+    .brand-badge {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(53,200,255,.2), rgba(57,217,138,.18));
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 10px 30px rgba(0,0,0,.35);
+    }
+
+    .brand-badge svg { width: 28px; height: 28px; }
+    .brand span { font-size: 1.35rem; }
+    .brand .accent { color: var(--accent2); }
+
+    .menu-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: transform .25s ease, background .25s ease;
+    }
+    .menu-btn:hover { transform: translateY(-2px); background: rgba(255,255,255,.06); }
+    .menu-btn i,
+    .menu-btn i::before,
+    .menu-btn i::after {
+      content: "";
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: #fff;
+      border-radius: 999px;
+      position: relative;
+    }
+    .menu-btn i::before { position: absolute; top: -7px; left: 0; }
+    .menu-btn i::after { position: absolute; top: 7px; left: 0; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 28px;
+      align-items: center;
+      padding: 42px 0 34px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      color: #dfe8ff;
+      border: 1px solid rgba(255,255,255,.09);
+      background: rgba(255,255,255,.04);
+      margin-bottom: 20px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+    }
+
+    .eyebrow .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 6px rgba(57,217,138,.12);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(3rem, 7vw, 6.2rem);
+      line-height: .92;
+      letter-spacing: -0.05em;
+    }
+
+    .grad {
+      background: linear-gradient(90deg, #ffffff 0%, #d1f7ff 35%, #44d7ff 62%, #39d98a 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .sub {
+      margin: 18px 0 0;
+      max-width: 58ch;
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--muted);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .btn {
+      border: 0;
+      cursor: pointer;
+      border-radius: 18px;
+      padding: 16px 22px;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: .2px;
+      transition: transform .25s ease, box-shadow .25s ease, background .25s ease, border-color .25s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn:hover { transform: translateY(-3px); }
+    .btn-primary {
+      color: #06101c;
+      background: linear-gradient(135deg, #39d98a, #35c8ff);
+      box-shadow: 0 14px 30px rgba(57,217,138,.22);
+    }
+    .btn-secondary {
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+    }
+
+    .hero-card {
+      position: relative;
+      border-radius: 34px;
+      padding: 22px;
+      background: linear-gradient(180deg, rgba(12,16,36,.9), rgba(7,8,22,.75));
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      min-height: 520px;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      background: radial-gradient(circle at 20% 20%, rgba(53,200,255,.2), transparent 40%), radial-gradient(circle at 80% 20%, rgba(57,217,138,.18), transparent 36%);
+      pointer-events: none;
+    }
+
+    .floating {
+      position: absolute;
+      inset: auto 24px 24px auto;
+      width: 170px;
+      height: 170px;
+      border-radius: 38px;
+      background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.1);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 20px 40px rgba(0,0,0,.3);
+      display: grid;
+      place-items: center;
+      animation: floaty 5s ease-in-out infinite;
+    }
+
+    .minecraft-cube {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      width: 130px;
+      aspect-ratio: 1;
+      transform-style: preserve-3d;
+      transform: rotateX(58deg) rotateZ(45deg);
+      animation: spin 14s linear infinite;
+    }
+    .face {
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #8f65ab, #a57ac3 55%, #6e488e);
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: inset 0 0 18px rgba(255,255,255,.08);
+    }
+    .face.top { transform: translateZ(65px); }
+    .face.bottom { transform: translateZ(-65px); filter: brightness(.75); }
+    .face.left { transform: rotateY(-90deg) translateZ(65px); width: 130px; height: 130px; }
+    .face.right { transform: rotateY(90deg) translateZ(65px); width: 130px; height: 130px; }
+    .face.front { transform: rotateX(90deg) translateZ(65px); width: 130px; height: 130px; }
+    .face.back { transform: rotateX(-90deg) translateZ(65px); width: 130px; height: 130px; }
+
+    .panel {
+      margin-top: 128px;
+      border-radius: 28px;
+      background: linear-gradient(145deg, rgba(13, 36, 56, .96), rgba(19, 80, 105, .94));
+      border: 1px solid rgba(255,255,255,.08);
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel h3 {
+      margin: 0;
+      font-size: 1.95rem;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+
+    .panel p {
+      margin: 12px 0 0;
+      color: rgba(255,255,255,.84);
+      max-width: 32ch;
+      line-height: 1.6;
+    }
+
+    .spacer { height: 92px; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: 14px 0 34px;
+    }
+
+    .stat {
+      border-radius: 24px;
+      padding: 18px 18px 16px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .stat .label {
+      color: var(--muted);
+      font-size: .92rem;
+      margin-bottom: 10px;
+    }
+    .stat .value {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+    .stat .hint {
+      margin-top: 6px;
+      color: rgba(255,255,255,.58);
+      font-size: .9rem;
+    }
+
+    .section { padding: 12px 0 18px; }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      letter-spacing: -0.03em;
+    }
+    .section-head p {
+      margin: 0;
+      max-width: 58ch;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .feature {
+      padding: 22px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(16,21,47,.86), rgba(10,13,30,.86));
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: var(--shadow);
+      transition: transform .25s ease, border-color .25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature:hover { transform: translateY(-5px); border-color: rgba(53,200,255,.22); }
+
+    .icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(53,200,255,.18), rgba(57,217,138,.14));
+      border: 1px solid rgba(255,255,255,.08);
+      margin-bottom: 14px;
+      font-size: 1.3rem;
+    }
+    .feature h3 { margin: 0 0 10px; font-size: 1.15rem; }
+    .feature p { margin: 0; color: var(--muted); line-height: 1.7; }
+
+    .dashboard {
+      margin-top: 20px;
+      border-radius: 32px;
+      padding: 22px;
+      background: linear-gradient(180deg, rgba(8, 12, 27, .95), rgba(8, 10, 22, .84));
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: var(--shadow);
+    }
+
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .server-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .server-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 16px 18px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .server-meta { display: flex; align-items: center; gap: 14px; }
+    .server-dot {
+      width: 14px; height: 14px; border-radius: 50%; flex: 0 0 auto;
+      box-shadow: 0 0 0 8px rgba(255,255,255,.04);
+    }
+    .online { background: var(--accent); box-shadow: 0 0 0 8px rgba(57,217,138,.08); }
+    .offline { background: var(--danger); box-shadow: 0 0 0 8px rgba(255,91,107,.08); }
+    .server-row strong { display: block; font-size: 1rem; }
+    .server-row span { color: var(--muted); font-size: .92rem; }
+    .status-pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: .9rem;
+      border: 1px solid rgba(255,255,255,.09);
+      background: rgba(255,255,255,.03);
+      white-space: nowrap;
+    }
+    .status-online { color: #bbffe0; }
+    .status-offline { color: #ffcad1; }
+
+    .note-box {
+      border-radius: 28px;
+      padding: 22px;
+      background: linear-gradient(145deg, rgba(53,200,255,.1), rgba(57,217,138,.08));
+      border: 1px solid rgba(255,255,255,.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 100%;
+    }
+
+    .note-box h3 { margin: 0 0 10px; font-size: 1.45rem; }
+    .note-box p { margin: 0; color: var(--muted); line-height: 1.7; }
+
+    .code-chip {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .chip {
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
+      color: #ecf5ff;
+      font-size: .9rem;
+      font-weight: 600;
+    }
+
+    .footer {
+      padding: 30px 0 38px;
+      color: rgba(255,255,255,.52);
+      text-align: center;
+      font-size: .95rem;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes floaty {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(3deg); }
+    }
+    @keyframes spin {
+      from { transform: rotateX(58deg) rotateZ(45deg) rotateY(0deg); }
+      to { transform: rotateX(58deg) rotateZ(45deg) rotateY(360deg); }
+    }
+
+    @media (max-width: 980px) {
+      .hero, .dash-grid, .features, .stats { grid-template-columns: 1fr; }
+      .hero-card { min-height: 460px; }
+      .section-head { flex-direction: column; align-items: start; }
+    }
+
+    @media (max-width: 620px) {
+      .wrap { width: min(100% - 18px, 1180px); }
+      .nav { padding: 14px 0; }
+      .brand span { font-size: 1.05rem; }
+      .brand-badge { width: 40px; height: 40px; border-radius: 14px; }
+      h1 { font-size: clamp(2.65rem, 14vw, 4.2rem); }
+      .sub { font-size: .98rem; }
+      .actions { flex-direction: column; }
+      .btn { width: 100%; justify-content: center; }
+      .panel { margin-top: 110px; }
+      .floating { width: 138px; height: 138px; }
+      .hero-card { min-height: 520px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap nav">
+      <div class="brand" aria-label="HDX-CLOUD logo">
+        <div class="brand-badge">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M11 46L28 16h10L21 46H11Z" fill="#ffffff"/>
+            <path d="M24 46L41 16h12L36 46H24Z" fill="#35c8ff"/>
+            <path d="M44 20l9 26h-9l-3-9h-7l5-8h2l-2-7h5Z" fill="#39d98a"/>
+          </svg>
+        </div>
+        <span><span class="accent">HDX</span>-CLOUD</span>
+      </div>
+      <button class="menu-btn" aria-label="Open menu"><i></i></button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="reveal">
+        <div class="eyebrow"><span class="dot"></span> Premium Minecraft hosting made simple</div>
+        <h1>
+          <span class="grad">Build your server</span><br />
+          with a premium feel.
+        </h1>
+        <p class="sub">
+          HDX-CLOUD gives your community a clean, fast, and modern hosting experience with smooth animation,
+          live activity stats, and a polished landing page that looks expensive on mobile and desktop.
+        </p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#features">
+            Get Started
+            <span aria-hidden="true">→</span>
+          </a>
+          <a class="btn btn-secondary" href="#activity">
+            View Features
+            <span aria-hidden="true">✦</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-card reveal">
+        <div class="panel">
+          <div class="minecraft-cube" aria-hidden="true">
+            <div class="face top"></div>
+            <div class="face bottom"></div>
+            <div class="face left"></div>
+            <div class="face right"></div>
+            <div class="face front"></div>
+            <div class="face back"></div>
+          </div>
+          <h3>Made for serious<br />hosting brands.</h3>
+          <p>
+            Clean gradients, glowing borders, premium cards, and motion that feels smooth without being heavy.
+          </p>
+          <div class="spacer"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats reveal" aria-label="Server overview statistics">
+      <div class="stat">
+        <div class="label">Servers online</div>
+        <div class="value" id="onlineCount">128</div>
+        <div class="hint">Auto-refreshing demo counter</div>
+      </div>
+      <div class="stat">
+        <div class="label">Servers offline</div>
+        <div class="value" id="offlineCount">12</div>
+        <div class="hint">Demo status changes over time</div>
+      </div>
+      <div class="stat">
+        <div class="label">Players online</div>
+        <div class="value" id="playersCount">4,892</div>
+        <div class="hint">Live-looking dashboard effect</div>
+      </div>
+      <div class="stat">
+        <div class="label">Uptime</div>
+        <div class="value" id="uptimeCount">99.98%</div>
+        <div class="hint">Premium infrastructure vibe</div>
+      </div>
+    </section>
+
+    <section class="section reveal" id="features">
+      <div class="section-head">
+        <div>
+          <h2>Why choose HDX-CLOUD</h2>
+          <p>Show the strongest reasons first: speed, stability, premium design, and a simple start for new users.</p>
+        </div>
+      </div>
+
+      <div class="features">
+        <article class="feature">
+          <div class="icon">⚡</div>
+          <h3>Fast setup</h3>
+          <p>Give users a quick start experience with a bold call to action and a smooth onboarding feel.</p>
+        </article>
+        <article class="feature">
+          <div class="icon">🛡️</div>
+          <h3>Stable hosting look</h3>
+          <p>Premium cards, glowing edges, and a clean dark theme help the brand feel trustworthy and modern.</p>
+        </article>
+        <article class="feature">
+          <div class="icon">✨</div>
+          <h3>Luxury motion</h3>
+          <p>Soft floating animation, reveal transitions, and subtle hover effects keep the page elegant.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section reveal" id="activity">
+      <div class="section-head">
+        <div>
+          <h2>Server activity dashboard</h2>
+          <p>The numbers below are a demo list that updates automatically to create a live server-status feel.</p>
+        </div>
+      </div>
+
+      <div class="dashboard">
+        <div class="dash-grid">
+          <div class="server-list" id="serverList">
+            <div class="server-row">
+              <div class="server-meta">
+                <div class="server-dot online"></div>
+                <div>
+                  <strong>Node-01 · Asia</strong>
+                  <span>1,248 players • 6GB free</span>
+                </div>
+              </div>
+              <div class="status-pill status-online">Online</div>
+            </div>
+            <div class="server-row">
+              <div class="server-meta">
+                <div class="server-dot offline"></div>
+                <div>
+                  <strong>Node-02 · Europe</strong>
+                  <span>Maintenance mode • 0 players</span>
+                </div>
+              </div>
+              <div class="status-pill status-offline">Offline</div>
+            </div>
+            <div class="server-row">
+              <div class="server-meta">
+                <div class="server-dot online"></div>
+                <div>
+                  <strong>Node-03 · India</strong>
+                  <span>Active • 2,014 players</span>
+                </div>
+              </div>
+              <div class="status-pill status-online">Online</div>
+            </div>
+          </div>
+
+          <div class="note-box">
+            <div>
+              <h3>Premium look, no pricing plan block.</h3>
+              <p>
+                Keep the page focused on branding, features, and the get-started button. Add your own purchase flow later if needed.
+              </p>
+              <div class="code-chip">
+                <span class="chip">Dark premium UI</span>
+                <span class="chip">Smooth CSS motion</span>
+                <span class="chip">Mobile first</span>
+                <span class="chip">HDX-CLOUD</span>
+              </div>
+            </div>
+            <div class="actions" style="margin-top:18px;">
+              <a class="btn btn-primary" href="#top">Get Started</a>
+              <a class="btn btn-secondary" href="#features">See Features</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    HDX-CLOUD · Premium Minecraft Hosting Landing Page Demo
+  </footer>
+
+  <script>
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('show');
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => observer.observe(el));
+
+    const onlineEl = document.getElementById('onlineCount');
+    const offlineEl = document.getElementById('offlineCount');
+    const playersEl = document.getElementById('playersCount');
+    const uptimeEl = document.getElementById('uptimeCount');
+
+    let online = 128;
+    let offline = 12;
+    let players = 4892;
+    let uptime = 99.98;
+
+    function animateCount(el, value, suffix = '') {
+      el.textContent = value.toLocaleString(undefined, {
+        minimumFractionDigits: suffix === '%' ? 2 : 0,
+        maximumFractionDigits: suffix === '%' ? 2 : 0,
+      }) + suffix;
+    }
+
+    function tick() {
+      const deltaOnline = Math.floor(Math.random() * 11) - 4;
+      const deltaOffline = Math.floor(Math.random() * 5) - 2;
+      const deltaPlayers = Math.floor(Math.random() * 151) - 70;
+      const deltaUptime = (Math.random() * 0.02 - 0.005);
+
+      online = Math.max(90, Math.min(220, online + deltaOnline));
+      offline = Math.max(2, Math.min(40, offline + deltaOffline));
+      players = Math.max(800, Math.min(9200, players + deltaPlayers));
+      uptime = Math.max(99.72, Math.min(99.999, uptime + deltaUptime));
+
+      animateCount(onlineEl, online);
+      animateCount(offlineEl, offline);
+      animateCount(playersEl, players);
+      uptimeEl.textContent = uptime.toFixed(2) + '%';
+    }
+
+    tick();
+    setInterval(tick, 3500);
+  </script>
+</body>
+</html>
