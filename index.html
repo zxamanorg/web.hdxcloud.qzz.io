@@ -3,515 +3,620 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HDX-CLOUD — Minecraft Hosting</title>
+  <title>HDX-CLOUD — Free Minecraft Hosting</title>
   <style>
-    :root {
-      --bg: #070816;
-      --bg2: #0b1025;
-      --card: rgba(11, 16, 37, 0.72);
-      --card2: rgba(14, 21, 48, 0.82);
-      --stroke: rgba(123, 196, 255, 0.18);
-      --text: #eef4ff;
-      --muted: rgba(238, 244, 255, 0.72);
-      --accent: #39d98a;
-      --accent2: #35c8ff;
-      --accent3: #8f6bff;
-      --danger: #ff5b6b;
-      --shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
-      --radius: 26px;
+    :root{
+      --bg:#050814;
+      --bg2:#090f22;
+      --card:rgba(12,18,40,.78);
+      --card2:rgba(16,24,52,.88);
+      --line:rgba(117, 192, 255, .14);
+      --text:#eef5ff;
+      --muted:rgba(238,245,255,.72);
+      --accent:#37d8ff;
+      --accent2:#33f0a5;
+      --danger:#ff6073;
+      --warning:#ffd24d;
+      --shadow:0 24px 70px rgba(0,0,0,.45);
+      --radius:28px;
     }
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--text);
       background:
-        radial-gradient(1200px 600px at 20% 0%, rgba(53, 200, 255, .16), transparent 45%),
-        radial-gradient(900px 500px at 90% 15%, rgba(143, 107, 255, .17), transparent 40%),
-        linear-gradient(180deg, #070816 0%, #090b18 35%, #05060f 100%);
-      color: var(--text);
-      overflow-x: hidden;
+        radial-gradient(1100px 700px at 15% 0%, rgba(55,216,255,.18), transparent 40%),
+        radial-gradient(900px 500px at 90% 15%, rgba(51,240,165,.16), transparent 36%),
+        linear-gradient(180deg, #050814 0%, #070b18 38%, #04050d 100%);
+      overflow-x:hidden;
     }
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
       background-image:
         linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
-      background-size: 58px 58px;
-      mask-image: radial-gradient(circle at center, black 35%, transparent 100%);
-      pointer-events: none;
-      opacity: .2;
+      background-size:56px 56px;
+      opacity:.16;
+      mask-image:radial-gradient(circle at center, black 38%, transparent 100%);
     }
 
-    .wrap {
-      width: min(1180px, calc(100% - 28px));
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
+    .wrap{
+      width:min(1180px, calc(100% - 24px));
+      margin:0 auto;
+      position:relative;
+      z-index:1;
     }
 
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 10;
+    .top-banner{
+      background:linear-gradient(90deg, rgba(55,216,255,.18), rgba(51,240,165,.16));
+      border-bottom:1px solid rgba(255,255,255,.08);
+      padding:10px 0;
       backdrop-filter: blur(14px);
-      background: linear-gradient(180deg, rgba(7, 8, 22, .92), rgba(7, 8, 22, .62));
-      border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+    .banner-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      font-size:.92rem;
+      color:#dff7ff;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.09);
+      white-space:nowrap;
+    }
+    .badge strong{color:#fff}
+    .badge small{opacity:.9}
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(16px);
+      background:linear-gradient(180deg, rgba(5,8,20,.94), rgba(5,8,20,.66));
+      border-bottom:1px solid rgba(255,255,255,.05);
     }
 
-    .nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 0;
+    .nav{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:16px 0;
+      gap:16px;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 800;
-      letter-spacing: .5px;
-      text-transform: uppercase;
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:900;
+      letter-spacing:.4px;
+      text-transform:uppercase;
     }
-
-    .brand-badge {
-      width: 46px;
-      height: 46px;
-      border-radius: 16px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(135deg, rgba(53,200,255,.2), rgba(57,217,138,.18));
-      border: 1px solid rgba(255,255,255,.12);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 10px 30px rgba(0,0,0,.35);
+    .brand-mark{
+      width:46px;
+      height:46px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg, rgba(55,216,255,.2), rgba(51,240,165,.14));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 10px 30px rgba(0,0,0,.3);
     }
+    .brand-mark svg{width:28px;height:28px}
+    .brand span{font-size:1.15rem}
+    .brand .accent{color:var(--accent)}
 
-    .brand-badge svg { width: 28px; height: 28px; }
-    .brand span { font-size: 1.35rem; }
-    .brand .accent { color: var(--accent2); }
-
-    .menu-btn {
-      width: 52px;
-      height: 52px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.03);
-      display: grid;
-      place-items: center;
-      cursor: pointer;
-      transition: transform .25s ease, background .25s ease;
+    .menu-btn{
+      width:50px;height:50px;border-radius:16px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+      display:grid;place-items:center;cursor:pointer;
+      transition:.25s ease;
     }
-    .menu-btn:hover { transform: translateY(-2px); background: rgba(255,255,255,.06); }
+    .menu-btn:hover{transform:translateY(-2px);background:rgba(255,255,255,.06)}
     .menu-btn i,
     .menu-btn i::before,
-    .menu-btn i::after {
-      content: "";
-      display: block;
-      width: 22px;
-      height: 2px;
-      background: #fff;
-      border-radius: 999px;
-      position: relative;
+    .menu-btn i::after{
+      content:"";
+      display:block;
+      width:22px;height:2px;border-radius:999px;background:#fff;
+      position:relative;
     }
-    .menu-btn i::before { position: absolute; top: -7px; left: 0; }
-    .menu-btn i::after { position: absolute; top: 7px; left: 0; }
+    .menu-btn i::before{position:absolute;top:-7px;left:0}
+    .menu-btn i::after{position:absolute;top:7px;left:0}
 
-    .hero {
-      display: grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 28px;
-      align-items: center;
-      padding: 42px 0 34px;
+    .hero{
+      display:grid;
+      grid-template-columns:1.02fr .98fr;
+      gap:28px;
+      padding:34px 0 24px;
+      align-items:center;
     }
 
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      color: #dfe8ff;
-      border: 1px solid rgba(255,255,255,.09);
-      background: rgba(255,255,255,.04);
-      margin-bottom: 20px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.09);
+      background:rgba(255,255,255,.04);
+      color:#edf8ff;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+      margin-bottom:20px;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background:var(--accent2);
+      box-shadow:0 0 0 6px rgba(51,240,165,.11);
     }
 
-    .eyebrow .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 0 6px rgba(57,217,138,.12);
+    h1{
+      margin:0;
+      font-size:clamp(3rem, 7vw, 6rem);
+      line-height:.92;
+      letter-spacing:-.055em;
+    }
+    .grad{
+      background:linear-gradient(90deg, #fff 0%, #dff9ff 35%, #3dd9ff 68%, #33f0a5 100%);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    .sub{
+      margin:18px 0 0;
+      max-width:58ch;
+      font-size:1.02rem;
+      line-height:1.8;
+      color:var(--muted);
     }
 
-    h1 {
-      margin: 0;
-      font-size: clamp(3rem, 7vw, 6.2rem);
-      line-height: .92;
-      letter-spacing: -0.05em;
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+      margin-top:28px;
     }
 
-    .grad {
-      background: linear-gradient(90deg, #ffffff 0%, #d1f7ff 35%, #44d7ff 62%, #39d98a 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:15px 22px;
+      border-radius:18px;
+      text-decoration:none;
+      font-weight:800;
+      border:0;
+      transition:.25s ease;
+      cursor:pointer;
+      letter-spacing:.2px;
+    }
+    .btn:hover{transform:translateY(-3px)}
+    .btn-primary{
+      color:#04111a;
+      background:linear-gradient(135deg, var(--accent2), var(--accent));
+      box-shadow:0 14px 30px rgba(55,216,255,.18);
+    }
+    .btn-secondary{
+      color:var(--text);
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.12);
     }
 
-    .sub {
-      margin: 18px 0 0;
-      max-width: 58ch;
-      font-size: 1.05rem;
-      line-height: 1.8;
-      color: var(--muted);
+    .hero-card{
+      position:relative;
+      min-height:560px;
+      border-radius:36px;
+      background:linear-gradient(180deg, rgba(10,15,35,.9), rgba(7,10,24,.75));
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      padding:22px;
+    }
+    .hero-card::before{
+      content:"";
+      position:absolute;inset:-2px;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(55,216,255,.18), transparent 35%),
+        radial-gradient(circle at 82% 16%, rgba(51,240,165,.14), transparent 34%);
+      pointer-events:none;
     }
 
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-top: 28px;
+    .phone-shell{
+      position:absolute;
+      inset:22px 22px 22px 22px;
+      border-radius:34px;
+      background:linear-gradient(180deg, rgba(15,20,42,.95), rgba(8,10,20,.95));
+      border:1px solid rgba(255,255,255,.09);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 24px 60px rgba(0,0,0,.38);
+      overflow:hidden;
+    }
+    .phone-top{
+      height:68px;
+      padding:14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid rgba(255,255,255,.05);
+      background:rgba(255,255,255,.02);
+    }
+    .mini-brand{
+      display:flex;align-items:center;gap:10px;font-weight:800;
+    }
+    .mini-brand .x{
+      width:30px;height:30px;border-radius:10px;
+      background:linear-gradient(135deg, rgba(55,216,255,.22), rgba(51,240,165,.16));
+      display:grid;place-items:center;
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .mini-brand span{font-size:.95rem}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 12px;border-radius:999px;
+      background:rgba(51,240,165,.12);
+      border:1px solid rgba(51,240,165,.18);
+      color:#d7ffe9;font-size:.85rem;font-weight:800;
     }
 
-    .btn {
-      border: 0;
-      cursor: pointer;
-      border-radius: 18px;
-      padding: 16px 22px;
-      font-weight: 700;
-      font-size: 1rem;
-      letter-spacing: .2px;
-      transition: transform .25s ease, box-shadow .25s ease, background .25s ease, border-color .25s ease;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
+    .phone-body{
+      padding:18px 16px 16px;
+      height:calc(100% - 68px);
+      overflow:auto;
     }
 
-    .btn:hover { transform: translateY(-3px); }
-    .btn-primary {
-      color: #06101c;
-      background: linear-gradient(135deg, #39d98a, #35c8ff);
-      box-shadow: 0 14px 30px rgba(57,217,138,.22);
-    }
-    .btn-secondary {
-      color: var(--text);
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.04);
+    .big-title{
+      font-size:clamp(2rem, 4vw, 3.2rem);
+      font-weight:900;
+      line-height:1.02;
+      letter-spacing:-.05em;
+      margin:0 0 16px;
     }
 
-    .hero-card {
-      position: relative;
-      border-radius: 34px;
-      padding: 22px;
-      background: linear-gradient(180deg, rgba(12,16,36,.9), rgba(7,8,22,.75));
-      border: 1px solid rgba(255,255,255,.08);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      min-height: 520px;
+    .banner-card{
+      border-radius:26px;
+      padding:18px;
+      background:linear-gradient(135deg, rgba(55,216,255,.2), rgba(51,240,165,.15));
+      border:1px solid rgba(255,255,255,.1);
+      margin:18px 0;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+    }
+    .banner-card h3{margin:0;font-size:1.15rem}
+    .banner-card p{margin:8px 0 0;color:rgba(255,255,255,.86);line-height:1.6}
+
+    .feature-list{
+      display:grid;
+      gap:12px;
+      margin-top:16px;
+    }
+    .feature-item{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:14px 16px;
+      border-radius:20px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .ico{
+      width:38px;height:38px;border-radius:14px;
+      display:grid;place-items:center;
+      background:linear-gradient(135deg, rgba(55,216,255,.16), rgba(51,240,165,.12));
+      border:1px solid rgba(255,255,255,.08);
+      flex:0 0 auto;
+    }
+    .feature-item strong{display:block}
+    .feature-item small{display:block;color:var(--muted);margin-top:4px}
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(4, 1fr);
+      gap:16px;
+      margin:14px 0 34px;
+    }
+    .stat{
+      padding:18px;
+      border-radius:24px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .stat .label{color:var(--muted);font-size:.92rem;margin-bottom:10px}
+    .stat .value{font-size:2rem;font-weight:900;letter-spacing:-.04em}
+    .stat .hint{margin-top:6px;color:rgba(255,255,255,.58);font-size:.9rem}
+
+    .section{
+      padding:12px 0 18px;
+    }
+    .section-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:end;
+      gap:18px;
+      margin-bottom:18px;
+    }
+    .section-head h2{
+      margin:0;
+      font-size:clamp(1.6rem, 4vw, 2.5rem);
+      letter-spacing:-.03em;
+    }
+    .section-head p{
+      margin:0;
+      max-width:62ch;
+      color:var(--muted);
+      line-height:1.7;
     }
 
-    .hero-card::before {
-      content: "";
-      position: absolute;
-      inset: -2px;
-      background: radial-gradient(circle at 20% 20%, rgba(53,200,255,.2), transparent 40%), radial-gradient(circle at 80% 20%, rgba(57,217,138,.18), transparent 36%);
-      pointer-events: none;
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:18px;
+    }
+    .card{
+      padding:22px;
+      border-radius:28px;
+      background:linear-gradient(180deg, rgba(14,20,43,.9), rgba(8,11,24,.88));
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:var(--shadow);
+      transition:.25s ease;
+      overflow:hidden;
+      position:relative;
+    }
+    .card:hover{transform:translateY(-5px);border-color:rgba(55,216,255,.24)}
+    .card .icon{
+      width:54px;height:54px;border-radius:18px;
+      display:grid;place-items:center;
+      background:linear-gradient(135deg, rgba(55,216,255,.18), rgba(51,240,165,.14));
+      border:1px solid rgba(255,255,255,.08);
+      font-size:1.3rem;
+      margin-bottom:14px;
+    }
+    .card h3{margin:0 0 10px;font-size:1.15rem}
+    .card p{margin:0;color:var(--muted);line-height:1.7}
+
+    .calc{
+      display:grid;
+      grid-template-columns:1.02fr .98fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    .calc-box{
+      padding:24px;
+      border-radius:30px;
+      background:linear-gradient(180deg, rgba(11,17,38,.92), rgba(8,10,22,.9));
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:var(--shadow);
+    }
+    .field{
+      margin-top:16px;
+    }
+    .field label{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:10px;
+      color:#eef4ff;
+      font-weight:700;
+      font-size:.95rem;
+    }
+    .field .subtext{color:var(--muted);font-size:.88rem;font-weight:500}
+    .select, .range, .toggle{
+      width:100%;
+    }
+    select, input[type="range"]{
+      width:100%;
+    }
+    select{
+      appearance:none;
+      -webkit-appearance:none;
+      -moz-appearance:none;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:16px 16px;
+      font:inherit;
+      outline:none;
+    }
+    select option{color:#0a1020}
+    .range-row{
+      display:flex;
+      justify-content:space-between;
+      color:var(--muted);
+      font-size:.88rem;
+      margin-top:10px;
     }
 
-    .floating {
-      position: absolute;
-      inset: auto 24px 24px auto;
-      width: 170px;
-      height: 170px;
-      border-radius: 38px;
-      background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
-      border: 1px solid rgba(255,255,255,.1);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 20px 40px rgba(0,0,0,.3);
-      display: grid;
-      place-items: center;
-      animation: floaty 5s ease-in-out infinite;
+    input[type="range"]{
+      accent-color:var(--accent);
+      height:10px;
+      background:transparent;
     }
 
-    .minecraft-cube {
-      position: absolute;
-      top: 24px;
-      right: 24px;
-      width: 130px;
-      aspect-ratio: 1;
-      transform-style: preserve-3d;
-      transform: rotateX(58deg) rotateZ(45deg);
-      animation: spin 14s linear infinite;
+    .toggle-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:10px;
     }
-    .face {
-      position: absolute;
-      inset: 0;
-      border-radius: 16px;
-      background: linear-gradient(135deg, #8f65ab, #a57ac3 55%, #6e488e);
-      border: 1px solid rgba(255,255,255,.08);
-      box-shadow: inset 0 0 18px rgba(255,255,255,.08);
+    .seg{
+      flex:1 1 140px;
+      padding:14px 16px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      text-align:center;
+      cursor:pointer;
+      font-weight:700;
+      transition:.22s ease;
+      user-select:none;
     }
-    .face.top { transform: translateZ(65px); }
-    .face.bottom { transform: translateZ(-65px); filter: brightness(.75); }
-    .face.left { transform: rotateY(-90deg) translateZ(65px); width: 130px; height: 130px; }
-    .face.right { transform: rotateY(90deg) translateZ(65px); width: 130px; height: 130px; }
-    .face.front { transform: rotateX(90deg) translateZ(65px); width: 130px; height: 130px; }
-    .face.back { transform: rotateX(-90deg) translateZ(65px); width: 130px; height: 130px; }
-
-    .panel {
-      margin-top: 128px;
-      border-radius: 28px;
-      background: linear-gradient(145deg, rgba(13, 36, 56, .96), rgba(19, 80, 105, .94));
-      border: 1px solid rgba(255,255,255,.08);
-      padding: 24px;
-      position: relative;
-      overflow: hidden;
+    .seg.active{
+      background:linear-gradient(135deg, rgba(55,216,255,.2), rgba(51,240,165,.14));
+      border-color:rgba(55,216,255,.22);
+      box-shadow:0 10px 30px rgba(55,216,255,.08);
     }
 
-    .panel h3 {
-      margin: 0;
-      font-size: 1.95rem;
-      line-height: 1.05;
-      letter-spacing: -0.03em;
+    .result{
+      border-radius:30px;
+      padding:24px;
+      background:linear-gradient(145deg, rgba(55,216,255,.10), rgba(51,240,165,.08));
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:var(--shadow);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap:18px;
+    }
+    .result h3{margin:0;font-size:1.45rem}
+    .result p{margin:0;color:var(--muted);line-height:1.7}
+    .rec{
+      padding:18px;
+      border-radius:24px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .rec .k{color:var(--muted);font-size:.9rem}
+    .rec .v{
+      margin-top:8px;
+      font-size:clamp(2rem, 5vw, 3.2rem);
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-.05em;
+    }
+    .chips{
+      display:flex;flex-wrap:wrap;gap:10px;
+    }
+    .chip{
+      padding:10px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      color:#ecf5ff;
+      font-size:.9rem;
+      font-weight:700;
     }
 
-    .panel p {
-      margin: 12px 0 0;
-      color: rgba(255,255,255,.84);
-      max-width: 32ch;
-      line-height: 1.6;
+    .compare{
+      margin-top:20px;
+      border-radius:32px;
+      padding:22px;
+      background:linear-gradient(180deg, rgba(9,13,28,.95), rgba(8,10,20,.9));
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:var(--shadow);
+    }
+    .table{
+      display:grid;
+      gap:12px;
+    }
+    .row{
+      display:grid;
+      grid-template-columns:1.4fr .8fr .8fr .8fr;
+      gap:10px;
+      align-items:center;
+      padding:16px 18px;
+      border-radius:22px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .row.head{
+      background:rgba(255,255,255,.06);
+      font-weight:800;
+      color:#fff;
+    }
+    .ok{color:#bfffe0;font-weight:900}
+    .no{color:#ffc0ca;font-weight:900}
+    .muted{color:var(--muted)}
+
+    .cta{
+      margin:24px 0 6px;
+      padding:24px;
+      border-radius:32px;
+      background:linear-gradient(135deg, rgba(55,216,255,.14), rgba(51,240,165,.12));
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:var(--shadow);
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      align-items:center;
+    }
+    .cta h3{margin:0 0 8px;font-size:1.5rem}
+    .cta p{margin:0;color:rgba(255,255,255,.82);line-height:1.7;max-width:60ch}
+
+    .footer{
+      padding:30px 0 38px;
+      text-align:center;
+      color:rgba(255,255,255,.54);
+      font-size:.95rem;
     }
 
-    .spacer { height: 92px; }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin: 14px 0 34px;
+    .reveal{
+      opacity:0;
+      transform:translateY(18px);
+      transition:opacity .7s ease, transform .7s ease;
+    }
+    .reveal.show{
+      opacity:1;
+      transform:translateY(0);
     }
 
-    .stat {
-      border-radius: 24px;
-      padding: 18px 18px 16px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.08);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
-    }
-    .stat .label {
-      color: var(--muted);
-      font-size: .92rem;
-      margin-bottom: 10px;
-    }
-    .stat .value {
-      font-size: 2rem;
-      font-weight: 800;
-      letter-spacing: -0.04em;
-    }
-    .stat .hint {
-      margin-top: 6px;
-      color: rgba(255,255,255,.58);
-      font-size: .9rem;
+    @media (max-width: 980px){
+      .hero, .stats, .cards, .calc, .section-head{grid-template-columns:1fr}
+      .section-head{display:flex;flex-direction:column;align-items:start}
+      .cta{flex-direction:column;align-items:start}
+      .row{grid-template-columns:1.2fr .7fr .7fr .7fr}
     }
 
-    .section { padding: 12px 0 18px; }
-
-    .section-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      align-items: end;
-      margin-bottom: 18px;
-    }
-    .section-head h2 {
-      margin: 0;
-      font-size: clamp(1.6rem, 4vw, 2.4rem);
-      letter-spacing: -0.03em;
-    }
-    .section-head p {
-      margin: 0;
-      max-width: 58ch;
-      color: var(--muted);
-      line-height: 1.7;
-    }
-
-    .features {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
-    .feature {
-      padding: 22px;
-      border-radius: 28px;
-      background: linear-gradient(180deg, rgba(16,21,47,.86), rgba(10,13,30,.86));
-      border: 1px solid rgba(255,255,255,.08);
-      box-shadow: var(--shadow);
-      transition: transform .25s ease, border-color .25s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    .feature:hover { transform: translateY(-5px); border-color: rgba(53,200,255,.22); }
-
-    .icon {
-      width: 54px;
-      height: 54px;
-      border-radius: 18px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(135deg, rgba(53,200,255,.18), rgba(57,217,138,.14));
-      border: 1px solid rgba(255,255,255,.08);
-      margin-bottom: 14px;
-      font-size: 1.3rem;
-    }
-    .feature h3 { margin: 0 0 10px; font-size: 1.15rem; }
-    .feature p { margin: 0; color: var(--muted); line-height: 1.7; }
-
-    .dashboard {
-      margin-top: 20px;
-      border-radius: 32px;
-      padding: 22px;
-      background: linear-gradient(180deg, rgba(8, 12, 27, .95), rgba(8, 10, 22, .84));
-      border: 1px solid rgba(255,255,255,.08);
-      box-shadow: var(--shadow);
-    }
-
-    .dash-grid {
-      display: grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap: 18px;
-      align-items: stretch;
-    }
-
-    .server-list {
-      display: grid;
-      gap: 12px;
-    }
-
-    .server-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      padding: 16px 18px;
-      border-radius: 22px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.08);
-    }
-
-    .server-meta { display: flex; align-items: center; gap: 14px; }
-    .server-dot {
-      width: 14px; height: 14px; border-radius: 50%; flex: 0 0 auto;
-      box-shadow: 0 0 0 8px rgba(255,255,255,.04);
-    }
-    .online { background: var(--accent); box-shadow: 0 0 0 8px rgba(57,217,138,.08); }
-    .offline { background: var(--danger); box-shadow: 0 0 0 8px rgba(255,91,107,.08); }
-    .server-row strong { display: block; font-size: 1rem; }
-    .server-row span { color: var(--muted); font-size: .92rem; }
-    .status-pill {
-      padding: 10px 14px;
-      border-radius: 999px;
-      font-weight: 700;
-      font-size: .9rem;
-      border: 1px solid rgba(255,255,255,.09);
-      background: rgba(255,255,255,.03);
-      white-space: nowrap;
-    }
-    .status-online { color: #bbffe0; }
-    .status-offline { color: #ffcad1; }
-
-    .note-box {
-      border-radius: 28px;
-      padding: 22px;
-      background: linear-gradient(145deg, rgba(53,200,255,.1), rgba(57,217,138,.08));
-      border: 1px solid rgba(255,255,255,.08);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-height: 100%;
-    }
-
-    .note-box h3 { margin: 0 0 10px; font-size: 1.45rem; }
-    .note-box p { margin: 0; color: var(--muted); line-height: 1.7; }
-
-    .code-chip {
-      margin-top: 18px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .chip {
-      padding: 10px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.05);
-      border: 1px solid rgba(255,255,255,.08);
-      color: #ecf5ff;
-      font-size: .9rem;
-      font-weight: 600;
-    }
-
-    .footer {
-      padding: 30px 0 38px;
-      color: rgba(255,255,255,.52);
-      text-align: center;
-      font-size: .95rem;
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(18px);
-      transition: opacity .7s ease, transform .7s ease;
-    }
-    .reveal.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    @keyframes floaty {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-10px) rotate(3deg); }
-    }
-    @keyframes spin {
-      from { transform: rotateX(58deg) rotateZ(45deg) rotateY(0deg); }
-      to { transform: rotateX(58deg) rotateZ(45deg) rotateY(360deg); }
-    }
-
-    @media (max-width: 980px) {
-      .hero, .dash-grid, .features, .stats { grid-template-columns: 1fr; }
-      .hero-card { min-height: 460px; }
-      .section-head { flex-direction: column; align-items: start; }
-    }
-
-    @media (max-width: 620px) {
-      .wrap { width: min(100% - 18px, 1180px); }
-      .nav { padding: 14px 0; }
-      .brand span { font-size: 1.05rem; }
-      .brand-badge { width: 40px; height: 40px; border-radius: 14px; }
-      h1 { font-size: clamp(2.65rem, 14vw, 4.2rem); }
-      .sub { font-size: .98rem; }
-      .actions { flex-direction: column; }
-      .btn { width: 100%; justify-content: center; }
-      .panel { margin-top: 110px; }
-      .floating { width: 138px; height: 138px; }
-      .hero-card { min-height: 520px; }
+    @media (max-width: 720px){
+      .banner-row{flex-direction:column;align-items:flex-start}
+      .nav{padding:14px 0}
+      .brand span{font-size:1rem}
+      .brand-mark{width:40px;height:40px;border-radius:14px}
+      h1{font-size:clamp(2.6rem, 14vw, 4.5rem)}
+      .sub{font-size:.98rem}
+      .actions{flex-direction:column}
+      .btn{width:100%}
+      .hero-card{min-height:520px}
+      .phone-shell{inset:16px}
+      .cards{grid-template-columns:1fr}
+      .row{grid-template-columns:1fr 1fr; gap:8px}
+      .row.head{display:none}
+      .row > div{padding:4px 0}
+      .row > div:nth-child(1){grid-column:1 / -1}
     }
   </style>
 </head>
 <body>
+  <div class="top-banner">
+    <div class="wrap banner-row">
+      <div class="badge">⚡ <strong>FREE ONLY</strong> <small>— no paid plan section, only free hosting</small></div>
+      <div class="badge">🎁 <strong>SAVE20</strong> <small>first launch banner</small></div>
+    </div>
+  </div>
+
   <header class="topbar">
     <div class="wrap nav">
       <div class="brand" aria-label="HDX-CLOUD logo">
-        <div class="brand-badge">
+        <div class="brand-mark">
           <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M11 46L28 16h10L21 46H11Z" fill="#ffffff"/>
-            <path d="M24 46L41 16h12L36 46H24Z" fill="#35c8ff"/>
-            <path d="M44 20l9 26h-9l-3-9h-7l5-8h2l-2-7h5Z" fill="#39d98a"/>
+            <path d="M12 46L27 16h11L23 46H12Z" fill="#ffffff"/>
+            <path d="M25 46L40 16h12L36 46H25Z" fill="#37d8ff"/>
+            <path d="M43 20l9 26h-9l-3-9h-7l5-8h2l-2-7h5Z" fill="#33f0a5"/>
           </svg>
         </div>
         <span><span class="accent">HDX</span>-CLOUD</span>
@@ -523,211 +628,384 @@
   <main class="wrap">
     <section class="hero">
       <div class="reveal">
-        <div class="eyebrow"><span class="dot"></span> Premium Minecraft hosting made simple</div>
+        <div class="eyebrow"><span class="dot"></span> Minecraft hosting for free users</div>
         <h1>
-          <span class="grad">Build your server</span><br />
-          with a premium feel.
+          <span class="grad">WiseHosting style</span><br />
+          clean premium landing page.
         </h1>
         <p class="sub">
-          HDX-CLOUD gives your community a clean, fast, and modern hosting experience with smooth animation,
-          live activity stats, and a polished landing page that looks expensive on mobile and desktop.
+          Ye single-file website free Minecraft hosting users ke liye bana hai. Isme banner, premium hero, features,
+          RAM calculator, comparison section aur mobile-friendly UI hai. Pricing plans ka block nahi hai.
         </p>
         <div class="actions">
-          <a class="btn btn-primary" href="#features">
-            Get Started
-            <span aria-hidden="true">→</span>
-          </a>
-          <a class="btn btn-secondary" href="#activity">
-            View Features
-            <span aria-hidden="true">✦</span>
-          </a>
+          <a class="btn btn-primary" href="#calculator">Open Calculator →</a>
+          <a class="btn btn-secondary" href="#features">See Features ✦</a>
         </div>
       </div>
 
       <div class="hero-card reveal">
-        <div class="panel">
-          <div class="minecraft-cube" aria-hidden="true">
-            <div class="face top"></div>
-            <div class="face bottom"></div>
-            <div class="face left"></div>
-            <div class="face right"></div>
-            <div class="face front"></div>
-            <div class="face back"></div>
+        <div class="phone-shell">
+          <div class="phone-top">
+            <div class="mini-brand">
+              <div class="x">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true">
+                  <path d="M5 17L10 7h4L9 17H5Z" fill="#fff"/>
+                  <path d="M11 17L16 7h3l-5 10h-3Z" fill="#37d8ff"/>
+                </svg>
+              </div>
+              <span>WISEHOSTING</span>
+            </div>
+            <div class="pill">Online 24/7</div>
           </div>
-          <h3>Made for serious<br />hosting brands.</h3>
-          <p>
-            Clean gradients, glowing borders, premium cards, and motion that feels smooth without being heavy.
-          </p>
-          <div class="spacer"></div>
+
+          <div class="phone-body">
+            <h2 class="big-title">Minecraft Server<br/>Hosting Made<br/>Easy!</h2>
+
+            <div class="banner-card">
+              <h3>Free hosting for everyone</h3>
+              <p>No pricing plans on this page. Just clean branding, strong CTA, and a simple setup flow.</p>
+            </div>
+
+            <div class="feature-list">
+              <div class="feature-item">
+                <div class="ico">⚙️</div>
+                <div><strong>Java &amp; Bedrock</strong><small>One page, both editions support feel</small></div>
+              </div>
+              <div class="feature-item">
+                <div class="ico">🧩</div>
+                <div><strong>1-Click Plugins</strong><small>Mods / plugins / presets style cards</small></div>
+              </div>
+              <div class="feature-item">
+                <div class="ico">🛡️</div>
+                <div><strong>Support</strong><small>24/7 support badge and status look</small></div>
+              </div>
+            </div>
+
+            <div style="height:14px"></div>
+            <a class="btn btn-primary" href="#calculator" style="width:100%">Start Free Server</a>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="stats reveal" aria-label="Server overview statistics">
+    <section class="stats reveal" aria-label="Server overview">
       <div class="stat">
-        <div class="label">Servers online</div>
+        <div class="label">Free users online</div>
         <div class="value" id="onlineCount">128</div>
-        <div class="hint">Auto-refreshing demo counter</div>
+        <div class="hint">Demo live counter</div>
       </div>
       <div class="stat">
-        <div class="label">Servers offline</div>
-        <div class="value" id="offlineCount">12</div>
-        <div class="hint">Demo status changes over time</div>
+        <div class="label">Servers active</div>
+        <div class="value" id="serverCount">36</div>
+        <div class="hint">Premium dashboard vibe</div>
       </div>
       <div class="stat">
         <div class="label">Players online</div>
         <div class="value" id="playersCount">4,892</div>
-        <div class="hint">Live-looking dashboard effect</div>
+        <div class="hint">Auto updating showcase</div>
       </div>
       <div class="stat">
         <div class="label">Uptime</div>
         <div class="value" id="uptimeCount">99.98%</div>
-        <div class="hint">Premium infrastructure vibe</div>
+        <div class="hint">Free hosting feel</div>
       </div>
     </section>
 
     <section class="section reveal" id="features">
       <div class="section-head">
         <div>
-          <h2>Why choose HDX-CLOUD</h2>
-          <p>Show the strongest reasons first: speed, stability, premium design, and a simple start for new users.</p>
+          <h2>Why this layout works</h2>
+          <p>Hero pe strong brand feel, niche cards, premium dark UI aur mobile-first spacing. Plans hide karke focus sirf free hosting aur setup par rakha gaya hai.</p>
         </div>
       </div>
 
-      <div class="features">
-        <article class="feature">
+      <div class="cards">
+        <article class="card">
           <div class="icon">⚡</div>
-          <h3>Fast setup</h3>
-          <p>Give users a quick start experience with a bold call to action and a smooth onboarding feel.</p>
+          <h3>Fast first impression</h3>
+          <p>Large heading, glowing gradient, banner strip, and clear CTA user ko immediately action par laata hai.</p>
         </article>
-        <article class="feature">
-          <div class="icon">🛡️</div>
-          <h3>Stable hosting look</h3>
-          <p>Premium cards, glowing edges, and a clean dark theme help the brand feel trustworthy and modern.</p>
+        <article class="card">
+          <div class="icon">📱</div>
+          <h3>Mobile premium look</h3>
+          <p>Phone-style mockup aur stacked sections se page Android screen par bhi polished dikhta hai.</p>
         </article>
-        <article class="feature">
-          <div class="icon">✨</div>
-          <h3>Luxury motion</h3>
-          <p>Soft floating animation, reveal transitions, and subtle hover effects keep the page elegant.</p>
+        <article class="card">
+          <div class="icon">🧠</div>
+          <h3>Smart free-only flow</h3>
+          <p>Pricing plan cards hata diye gaye hain. Uski jagah calculator aur feature benefits rakhe gaye hain.</p>
         </article>
       </div>
     </section>
 
-    <section class="section reveal" id="activity">
+    <section class="section reveal" id="calculator">
       <div class="section-head">
         <div>
-          <h2>Server activity dashboard</h2>
-          <p>The numbers below are a demo list that updates automatically to create a live server-status feel.</p>
+          <h2>Minecraft RAM calculator</h2>
+          <p>Ye section screenshot jaisa feel deta hai. Server type, player count aur mods select karke recommended RAM nikalta hai.</p>
         </div>
       </div>
 
-      <div class="dashboard">
-        <div class="dash-grid">
-          <div class="server-list" id="serverList">
-            <div class="server-row">
-              <div class="server-meta">
-                <div class="server-dot online"></div>
-                <div>
-                  <strong>Node-01 · Asia</strong>
-                  <span>1,248 players • 6GB free</span>
-                </div>
-              </div>
-              <div class="status-pill status-online">Online</div>
-            </div>
-            <div class="server-row">
-              <div class="server-meta">
-                <div class="server-dot offline"></div>
-                <div>
-                  <strong>Node-02 · Europe</strong>
-                  <span>Maintenance mode • 0 players</span>
-                </div>
-              </div>
-              <div class="status-pill status-offline">Offline</div>
-            </div>
-            <div class="server-row">
-              <div class="server-meta">
-                <div class="server-dot online"></div>
-                <div>
-                  <strong>Node-03 · India</strong>
-                  <span>Active • 2,014 players</span>
-                </div>
-              </div>
-              <div class="status-pill status-online">Online</div>
+      <div class="calc">
+        <div class="calc-box">
+          <div class="field">
+            <label for="version">Minecraft version <span class="subtext">latest or older</span></label>
+            <select id="version">
+              <option value="new">1.21 or newer</option>
+              <option value="mid">1.18 - 1.20</option>
+              <option value="old">1.17 or older</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Server type <span class="subtext">choose one</span></label>
+            <div class="toggle-row" id="serverType">
+              <div class="seg active" data-type="vanilla">Vanilla</div>
+              <div class="seg" data-type="optimized">Optimized</div>
+              <div class="seg" data-type="modded">Modded</div>
+              <div class="seg" data-type="bedrock">Bedrock</div>
             </div>
           </div>
 
-          <div class="note-box">
-            <div>
-              <h3>Premium look, no pricing plan block.</h3>
-              <p>
-                Keep the page focused on branding, features, and the get-started button. Add your own purchase flow later if needed.
-              </p>
-              <div class="code-chip">
-                <span class="chip">Dark premium UI</span>
-                <span class="chip">Smooth CSS motion</span>
-                <span class="chip">Mobile first</span>
-                <span class="chip">HDX-CLOUD</span>
-              </div>
+          <div class="field">
+            <label for="players">Player count <span class="subtext"><span id="playersLabel">2+</span></span></label>
+            <input id="players" type="range" min="2" max="40" value="2" />
+            <div class="range-row">
+              <span>2+</span><span>5+</span><span>15+</span><span>25+</span><span>40</span>
             </div>
-            <div class="actions" style="margin-top:18px;">
-              <a class="btn btn-primary" href="#top">Get Started</a>
-              <a class="btn btn-secondary" href="#features">See Features</a>
+          </div>
+
+          <div class="field">
+            <label for="mods">Number of server mods <span class="subtext">optional</span></label>
+            <input id="mods" type="range" min="0" max="80" value="0" />
+            <div class="range-row">
+              <span>0</span><span>20</span><span>40</span><span>60</span><span>80</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Using optimization mods? <span class="subtext">helps reduce RAM</span></label>
+            <div class="toggle-row" id="optToggle">
+              <div class="seg active" data-opt="yes">Yes</div>
+              <div class="seg" data-opt="no">No</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="result">
+          <div>
+            <h3>Recommended RAM</h3>
+            <p id="recommendText">For a tiny Vanilla free server, the calculator suggests around 2 GB RAM.</p>
+          </div>
+
+          <div class="rec">
+            <div class="k">Best package for this setup</div>
+            <div class="v" id="ramValue">2 GB</div>
+            <div class="k" id="ramNote">Light server • low player count • fast startup</div>
+          </div>
+
+          <div>
+            <div class="chips">
+              <span class="chip" id="chipType">Vanilla</span>
+              <span class="chip" id="chipPlayers">2+ players</span>
+              <span class="chip" id="chipMods">0 mods</span>
+              <span class="chip" id="chipOpt">Optimization: Yes</span>
             </div>
           </div>
         </div>
       </div>
+    </section>
+
+    <section class="section reveal">
+      <div class="section-head">
+        <div>
+          <h2>Comparison look</h2>
+          <p>Ye block banner ke baad strong proof section jaisa kaam karta hai. Isme pricing nahi, sirf free-hosting features ka visual comparison hai.</p>
+        </div>
+      </div>
+
+      <div class="compare">
+        <div class="table">
+          <div class="row head">
+            <div>Feature</div>
+            <div>HDX-CLOUD</div>
+            <div>Other free hosts</div>
+            <div>Paid hosts</div>
+          </div>
+          <div class="row">
+            <div>Free-only landing</div>
+            <div class="ok">✓</div>
+            <div class="no">×</div>
+            <div class="no">×</div>
+          </div>
+          <div class="row">
+            <div>Mobile premium UI</div>
+            <div class="ok">✓</div>
+            <div class="no">×</div>
+            <div class="ok">✓</div>
+          </div>
+          <div class="row">
+            <div>RAM calculator</div>
+            <div class="ok">✓</div>
+            <div class="muted">Sometimes</div>
+            <div class="ok">✓</div>
+          </div>
+          <div class="row">
+            <div>No pricing plan block</div>
+            <div class="ok">✓</div>
+            <div class="no">×</div>
+            <div class="no">×</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta reveal">
+      <div>
+        <h3>Ready to build the free hosting version?</h3>
+        <p>Is code ko base bana ke aap banner, login button, server panels, aur real backend baad me add kar sakte ho. Abhi ye premium WiseHosting-style front page jaisa look dega.</p>
+      </div>
+      <a class="btn btn-primary" href="#top">Launch Page →</a>
     </section>
   </main>
 
   <footer class="footer">
-    HDX-CLOUD · Premium Minecraft Hosting Landing Page Demo
+    HDX-CLOUD · Free Minecraft Hosting Landing Page
   </footer>
 
   <script>
+    // reveal on scroll
     const revealEls = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
         if (entry.isIntersecting) entry.target.classList.add('show');
       });
     }, { threshold: 0.15 });
     revealEls.forEach(el => observer.observe(el));
 
+    // counters
+    let online = 128, servers = 36, players = 4892, uptime = 99.98;
     const onlineEl = document.getElementById('onlineCount');
-    const offlineEl = document.getElementById('offlineCount');
+    const serverEl = document.getElementById('serverCount');
     const playersEl = document.getElementById('playersCount');
     const uptimeEl = document.getElementById('uptimeCount');
 
-    let online = 128;
-    let offline = 12;
-    let players = 4892;
-    let uptime = 99.98;
+    function tickCounters(){
+      online = Math.max(90, Math.min(220, online + Math.floor(Math.random() * 9) - 3));
+      servers = Math.max(20, Math.min(90, servers + Math.floor(Math.random() * 5) - 2));
+      players = Math.max(800, Math.min(9200, players + Math.floor(Math.random() * 140) - 60));
+      uptime = Math.max(99.70, Math.min(99.999, uptime + (Math.random() * 0.02 - 0.004)));
 
-    function animateCount(el, value, suffix = '') {
-      el.textContent = value.toLocaleString(undefined, {
-        minimumFractionDigits: suffix === '%' ? 2 : 0,
-        maximumFractionDigits: suffix === '%' ? 2 : 0,
-      }) + suffix;
-    }
-
-    function tick() {
-      const deltaOnline = Math.floor(Math.random() * 11) - 4;
-      const deltaOffline = Math.floor(Math.random() * 5) - 2;
-      const deltaPlayers = Math.floor(Math.random() * 151) - 70;
-      const deltaUptime = (Math.random() * 0.02 - 0.005);
-
-      online = Math.max(90, Math.min(220, online + deltaOnline));
-      offline = Math.max(2, Math.min(40, offline + deltaOffline));
-      players = Math.max(800, Math.min(9200, players + deltaPlayers));
-      uptime = Math.max(99.72, Math.min(99.999, uptime + deltaUptime));
-
-      animateCount(onlineEl, online);
-      animateCount(offlineEl, offline);
-      animateCount(playersEl, players);
+      onlineEl.textContent = online.toLocaleString();
+      serverEl.textContent = servers.toLocaleString();
+      playersEl.textContent = players.toLocaleString();
       uptimeEl.textContent = uptime.toFixed(2) + '%';
     }
+    tickCounters();
+    setInterval(tickCounters, 3500);
 
-    tick();
-    setInterval(tick, 3500);
+    // calculator
+    const versionEl = document.getElementById('version');
+    const playersRange = document.getElementById('players');
+    const modsRange = document.getElementById('mods');
+    const serverTypeWrap = document.getElementById('serverType');
+    const optWrap = document.getElementById('optToggle');
+
+    const ramValue = document.getElementById('ramValue');
+    const ramNote = document.getElementById('ramNote');
+    const recommendText = document.getElementById('recommendText');
+    const playersLabel = document.getElementById('playersLabel');
+
+    const chipType = document.getElementById('chipType');
+    const chipPlayers = document.getElementById('chipPlayers');
+    const chipMods = document.getElementById('chipMods');
+    const chipOpt = document.getElementById('chipOpt');
+
+    let serverType = 'vanilla';
+    let optimization = 'yes';
+
+    function calcRAM(){
+      const version = versionEl.value;
+      const players = Number(playersRange.value);
+      const mods = Number(modsRange.value);
+
+      let ram = 2;
+
+      // base by server type
+      if(serverType === 'optimized') ram = 2;
+      if(serverType === 'bedrock') ram = 1;
+      if(serverType === 'modded') ram = 4;
+
+      // player scaling
+      if(players >= 5) ram += 1;
+      if(players >= 15) ram += 1;
+      if(players >= 25) ram += 2;
+      if(players >= 35) ram += 2;
+
+      // mods scaling
+      ram += Math.floor(mods / 15) * 1;
+
+      // version scaling
+      if(version === 'new') ram += 1;
+      if(version === 'old') ram -= 0.5;
+
+      // optimization
+      if(optimization === 'yes') ram -= 1;
+
+      // clamp
+      ram = Math.max(1, Math.min(16, Math.round(ram * 2) / 2));
+
+      ramValue.textContent = ram + ' GB';
+
+      let note = 'Great for a small free server.';
+      if(ram <= 2) note = 'Light server • low player count • fast startup';
+      else if(ram <= 4) note = 'Balanced free server • stable gameplay';
+      else if(ram <= 8) note = 'Heavier world • plugins or small modpack';
+      else note = 'Large setup • bigger worlds and more players';
+
+      if(serverType === 'bedrock') note = 'Bedrock setup • lower RAM use';
+      if(serverType === 'modded') note = 'Modded setup • more RAM recommended';
+
+      ramNote.textContent = note;
+
+      const typeLabel = serverType.charAt(0).toUpperCase() + serverType.slice(1);
+      chipType.textContent = typeLabel;
+      chipPlayers.textContent = players + '+ players';
+      chipMods.textContent = mods + ' mods';
+      chipOpt.textContent = 'Optimization: ' + (optimization === 'yes' ? 'Yes' : 'No');
+
+      const vtxt = version === 'new' ? '1.21+ version' : version === 'mid' ? '1.18–1.20 version' : 'older version';
+      let baseText = `For a ${typeLabel} free server on ${vtxt} with ${players} players, the recommended RAM is about ${ram} GB.`;
+      if(mods > 0) baseText += ` You added ${mods} mods, so extra memory is useful.`;
+      recommendText.textContent = baseText;
+    }
+
+    playersRange.addEventListener('input', () => {
+      playersLabel.textContent = playersRange.value + '+';
+      calcRAM();
+    });
+    modsRange.addEventListener('input', calcRAM);
+    versionEl.addEventListener('change', calcRAM);
+
+    serverTypeWrap.querySelectorAll('.seg').forEach(btn => {
+      btn.addEventListener('click', () => {
+        serverTypeWrap.querySelectorAll('.seg').forEach(x => x.classList.remove('active'));
+        btn.classList.add('active');
+        serverType = btn.dataset.type;
+        calcRAM();
+      });
+    });
+
+    optWrap.querySelectorAll('.seg').forEach(btn => {
+      btn.addEventListener('click', () => {
+        optWrap.querySelectorAll('.seg').forEach(x => x.classList.remove('active'));
+        btn.classList.add('active');
+        optimization = btn.dataset.opt;
+        calcRAM();
+      });
+    });
+
+    calcRAM();
   </script>
 </body>
 </html>
