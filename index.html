@@ -339,9 +339,7 @@
     .stat .value{font-size:2rem;font-weight:900;letter-spacing:-.04em}
     .stat .hint{margin-top:6px;color:rgba(255,255,255,.58);font-size:.9rem}
 
-    .section{
-      padding:12px 0 18px;
-    }
+    .section{padding:12px 0 18px}
     .section-head{
       display:flex;
       justify-content:space-between;
@@ -401,9 +399,7 @@
       border:1px solid rgba(255,255,255,.08);
       box-shadow:var(--shadow);
     }
-    .field{
-      margin-top:16px;
-    }
+    .field{margin-top:16px}
     .field label{
       display:flex;
       justify-content:space-between;
@@ -414,9 +410,6 @@
       font-size:.95rem;
     }
     .field .subtext{color:var(--muted);font-size:.88rem;font-weight:500}
-    .select, .range, .toggle{
-      width:100%;
-    }
     select, input[type="range"]{
       width:100%;
     }
@@ -576,14 +569,28 @@
     }
 
     @media (max-width: 980px){
-      .hero, .stats, .cards, .calc, .section-head{grid-template-columns:1fr}
-      .section-head{display:flex;flex-direction:column;align-items:start}
-      .cta{flex-direction:column;align-items:start}
-      .row{grid-template-columns:1.2fr .7fr .7fr .7fr}
+      .hero, .stats, .cards, .calc{
+        grid-template-columns:1fr;
+      }
+      .section-head{
+        display:flex;
+        flex-direction:column;
+        align-items:start;
+      }
+      .cta{
+        flex-direction:column;
+        align-items:start;
+      }
+      .row{
+        grid-template-columns:1.2fr .7fr .7fr .7fr;
+      }
     }
 
     @media (max-width: 720px){
-      .banner-row{flex-direction:column;align-items:flex-start}
+      .banner-row{
+        flex-direction:column;
+        align-items:flex-start;
+      }
       .nav{padding:14px 0}
       .brand span{font-size:1rem}
       .brand-mark{width:40px;height:40px;border-radius:14px}
@@ -605,7 +612,7 @@
   <div class="top-banner">
     <div class="wrap banner-row">
       <div class="badge">⚡ <strong>FREE ONLY</strong> <small>— no paid plan section, only free hosting</small></div>
-      <div class="badge">🎁 <strong>SAVE20</strong> <small>first launch banner</small></div>
+      <div class="badge">🎁 <strong>HDX-CLOUD</strong> <small>premium launch banner</small></div>
     </div>
   </div>
 
@@ -628,14 +635,14 @@
   <main class="wrap">
     <section class="hero">
       <div class="reveal">
-        <div class="eyebrow"><span class="dot"></span> Minecraft hosting for free users</div>
+        <div class="eyebrow"><span class="dot"></span> Free Minecraft hosting for everyone</div>
         <h1>
-          <span class="grad">WiseHosting style</span><br />
-          clean premium landing page.
+          <span class="grad">HDX-CLOUD</span><br />
+          premium hosting landing page.
         </h1>
         <p class="sub">
-          Ye single-file website free Minecraft hosting users ke liye bana hai. Isme banner, premium hero, features,
-          RAM calculator, comparison section aur mobile-friendly UI hai. Pricing plans ka block nahi hai.
+          Ye design free hosting users ke liye hai. Isme strong branding, clean banner, feature cards,
+          calculator, aur mobile-friendly premium UI hai. Pricing plans ka block nahi hai.
         </p>
         <div class="actions">
           <a class="btn btn-primary" href="#calculator">Open Calculator →</a>
@@ -653,7 +660,7 @@
                   <path d="M11 17L16 7h3l-5 10h-3Z" fill="#37d8ff"/>
                 </svg>
               </div>
-              <span>WISEHOSTING</span>
+              <span>HDX-CLOUD</span>
             </div>
             <div class="pill">Online 24/7</div>
           </div>
@@ -669,7 +676,7 @@
             <div class="feature-list">
               <div class="feature-item">
                 <div class="ico">⚙️</div>
-                <div><strong>Java &amp; Bedrock</strong><small>One page, both editions support feel</small></div>
+                <div><strong>Java &amp; Bedrock</strong><small>Both edition support feel</small></div>
               </div>
               <div class="feature-item">
                 <div class="ico">🧩</div>
@@ -677,7 +684,7 @@
               </div>
               <div class="feature-item">
                 <div class="ico">🛡️</div>
-                <div><strong>Support</strong><small>24/7 support badge and status look</small></div>
+                <div><strong>DDoS Protection</strong><small>Safer and more stable hosting feel</small></div>
               </div>
             </div>
 
@@ -715,25 +722,25 @@
       <div class="section-head">
         <div>
           <h2>Why this layout works</h2>
-          <p>Hero pe strong brand feel, niche cards, premium dark UI aur mobile-first spacing. Plans hide karke focus sirf free hosting aur setup par rakha gaya hai.</p>
+          <p>Hero pe strong brand feel, premium dark UI aur mobile-first spacing. Free hosting, support aur protection par focus rakha gaya hai.</p>
         </div>
       </div>
 
       <div class="cards">
         <article class="card">
-          <div class="icon">⚡</div>
-          <h3>Fast first impression</h3>
-          <p>Large heading, glowing gradient, banner strip, and clear CTA user ko immediately action par laata hai.</p>
+          <div class="icon">🕒</div>
+          <h3>24/7 support</h3>
+          <p>Users ko har time help milne ka trust dikhata hai. Support badge aur clean layout se page more professional lagta hai.</p>
         </article>
         <article class="card">
-          <div class="icon">📱</div>
-          <h3>Mobile premium look</h3>
-          <p>Phone-style mockup aur stacked sections se page Android screen par bhi polished dikhta hai.</p>
+          <div class="icon">🛡️</div>
+          <h3>DDoS protection</h3>
+          <p>Safe and stable hosting ka signal. Security-focused card users ko confidence deta hai ki server reliable hai.</p>
         </article>
         <article class="card">
-          <div class="icon">🧠</div>
-          <h3>Smart free-only flow</h3>
-          <p>Pricing plan cards hata diye gaye hain. Uski jagah calculator aur feature benefits rakhe gaye hain.</p>
+          <div class="icon">💻</div>
+          <h3>Mobile + PC support</h3>
+          <p>Android phone aur desktop dono par page polished dikhe. Responsive cards aur wide layout isko easy banate hain.</p>
         </article>
       </div>
     </section>
@@ -819,8 +826,8 @@
     <section class="section reveal">
       <div class="section-head">
         <div>
-          <h2>Comparison look</h2>
-          <p>Ye block banner ke baad strong proof section jaisa kaam karta hai. Isme pricing nahi, sirf free-hosting features ka visual comparison hai.</p>
+          <h2>Feature comparison</h2>
+          <p>Ye block trust build karta hai. Pricing nahi, sirf free hosting ke strong benefits aur clean comparison diya gaya hai.</p>
         </div>
       </div>
 
@@ -839,22 +846,22 @@
             <div class="no">×</div>
           </div>
           <div class="row">
-            <div>Mobile premium UI</div>
-            <div class="ok">✓</div>
-            <div class="no">×</div>
-            <div class="ok">✓</div>
-          </div>
-          <div class="row">
-            <div>RAM calculator</div>
+            <div>24/7 support</div>
             <div class="ok">✓</div>
             <div class="muted">Sometimes</div>
             <div class="ok">✓</div>
           </div>
           <div class="row">
-            <div>No pricing plan block</div>
+            <div>DDoS protection</div>
             <div class="ok">✓</div>
             <div class="no">×</div>
-            <div class="no">×</div>
+            <div class="ok">✓</div>
+          </div>
+          <div class="row">
+            <div>Mobile + PC support</div>
+            <div class="ok">✓</div>
+            <div class="muted">Limited</div>
+            <div class="ok">✓</div>
           </div>
         </div>
       </div>
@@ -863,7 +870,7 @@
     <section class="cta reveal">
       <div>
         <h3>Ready to build the free hosting version?</h3>
-        <p>Is code ko base bana ke aap banner, login button, server panels, aur real backend baad me add kar sakte ho. Abhi ye premium WiseHosting-style front page jaisa look dega.</p>
+        <p>Is code ko base bana ke aap banner, login button, server panels aur real backend baad me add kar sakte ho. Abhi ye HDX-CLOUD style premium front page jaisa look dega.</p>
       </div>
       <a class="btn btn-primary" href="#top">Launch Page →</a>
     </section>
@@ -874,7 +881,6 @@
   </footer>
 
   <script>
-    // reveal on scroll
     const revealEls = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
@@ -931,28 +937,22 @@
 
       let ram = 2;
 
-      // base by server type
       if(serverType === 'optimized') ram = 2;
       if(serverType === 'bedrock') ram = 1;
       if(serverType === 'modded') ram = 4;
 
-      // player scaling
       if(players >= 5) ram += 1;
       if(players >= 15) ram += 1;
       if(players >= 25) ram += 2;
       if(players >= 35) ram += 2;
 
-      // mods scaling
       ram += Math.floor(mods / 15) * 1;
 
-      // version scaling
       if(version === 'new') ram += 1;
       if(version === 'old') ram -= 0.5;
 
-      // optimization
       if(optimization === 'yes') ram -= 1;
 
-      // clamp
       ram = Math.max(1, Math.min(16, Math.round(ram * 2) / 2));
 
       ramValue.textContent = ram + ' GB';
