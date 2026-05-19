@@ -1,1014 +1,2372 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HDX-CLOUD — Free Minecraft Hosting</title>
-  <style>
-    :root{
-      --bg:#050814;
-      --bg2:#090f22;
-      --card:rgba(12,18,40,.78);
-      --card2:rgba(16,24,52,.88);
-      --line:rgba(117, 192, 255, .14);
-      --text:#eef5ff;
-      --muted:rgba(238,245,255,.72);
-      --accent:#37d8ff;
-      --accent2:#33f0a5;
-      --danger:#ff6073;
-      --warning:#ffd24d;
-      --shadow:0 24px 70px rgba(0,0,0,.45);
-      --radius:28px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HDX-CLOUD — Free Minecraft Hosting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-primary: #030712;
+  --bg-secondary: #060f1e;
+  --bg-card: rgba(6, 20, 45, 0.7);
+  --cyan: #00e5ff;
+  --cyan-dim: #00b4cc;
+  --green: #00ff9d;
+  --green-dim: #00cc7a;
+  --blue: #0066ff;
+  --blue-bright: #3d8bff;
+  --text-primary: #e8f4ff;
+  --text-secondary: #7ba3c8;
+  --text-muted: #3d6080;
+  --border: rgba(0, 229, 255, 0.12);
+  --border-bright: rgba(0, 229, 255, 0.3);
+  --glow-cyan: 0 0 30px rgba(0, 229, 255, 0.25);
+  --glow-green: 0 0 30px rgba(0, 255, 157, 0.25);
+  --glow-blue: 0 0 30px rgba(0, 102, 255, 0.25);
+  --radius: 12px;
+  --radius-lg: 18px;
+}
 
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;
-      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(1100px 700px at 15% 0%, rgba(55,216,255,.18), transparent 40%),
-        radial-gradient(900px 500px at 90% 15%, rgba(51,240,165,.16), transparent 36%),
-        linear-gradient(180deg, #050814 0%, #070b18 38%, #04050d 100%);
-      overflow-x:hidden;
-    }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body::before{
-      content:"";
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      background-image:
-        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
-      background-size:56px 56px;
-      opacity:.16;
-      mask-image:radial-gradient(circle at center, black 38%, transparent 100%);
-    }
+html { scroll-behavior: smooth; font-size: 16px; }
 
-    .wrap{
-      width:min(1180px, calc(100% - 24px));
-      margin:0 auto;
-      position:relative;
-      z-index:1;
-    }
+body {
+  font-family: 'Rajdhani', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
 
-    .top-banner{
-      background:linear-gradient(90deg, rgba(55,216,255,.18), rgba(51,240,165,.16));
-      border-bottom:1px solid rgba(255,255,255,.08);
-      padding:10px 0;
-      backdrop-filter: blur(14px);
-    }
-    .banner-row{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      font-size:.92rem;
-      color:#dff7ff;
-    }
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 12px;
-      border-radius:999px;
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.09);
-      white-space:nowrap;
-    }
-    .badge strong{color:#fff}
-    .badge small{opacity:.9}
+/* ── BACKGROUND DECORATIONS ── */
+.bg-decor {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+}
+.bg-blob {
+  position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.08;
+}
+.bg-blob-1 { width: 600px; height: 600px; background: var(--cyan); top: -200px; left: -200px; }
+.bg-blob-2 { width: 500px; height: 500px; background: var(--blue); bottom: 20%; right: -150px; }
+.bg-blob-3 { width: 400px; height: 400px; background: var(--green); bottom: -100px; left: 30%; }
+.bg-grid {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
 
-    .topbar{
-      position:sticky;
-      top:0;
-      z-index:10;
-      backdrop-filter: blur(16px);
-      background:linear-gradient(180deg, rgba(5,8,20,.94), rgba(5,8,20,.66));
-      border-bottom:1px solid rgba(255,255,255,.05);
-    }
+/* ── ANNOUNCEMENT BAR ── */
+.announce-bar {
+  background: linear-gradient(90deg, rgba(0,229,255,0.08), rgba(0,102,255,0.12), rgba(0,255,157,0.08));
+  border-bottom: 1px solid var(--border);
+  padding: 10px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: relative; z-index: 100; gap: 12px;
+}
+.announce-text {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px; font-weight: 500; color: var(--text-secondary);
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.announce-text span { color: var(--cyan); font-weight: 600; }
+.announce-badge {
+  font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+  color: var(--green); border: 1px solid rgba(0,255,157,0.3);
+  padding: 3px 10px; border-radius: 20px;
+  background: rgba(0,255,157,0.06);
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+.announce-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+  animation: pulse-dot 2s ease-in-out infinite;
+  display: inline-block; flex-shrink: 0;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,255,157,0.6); }
+  50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(0,255,157,0); }
+}
 
-    .nav{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:16px 0;
-      gap:16px;
-    }
+/* ── NAVBAR ── */
+nav {
+  position: sticky; top: 0; z-index: 99;
+  background: rgba(3, 7, 18, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+  transition: background 0.3s;
+}
+nav.scrolled {
+  background: rgba(3, 7, 18, 0.97);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.4);
+}
+.nav-logo {
+  font-family: 'Orbitron', monospace;
+  font-size: 20px; font-weight: 900;
+  color: var(--cyan); text-decoration: none;
+  letter-spacing: 2px; display: flex; align-items: center; gap: 8px;
+  flex-shrink: 0;
+}
+.nav-logo .logo-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--cyan), var(--blue));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.nav-logo .logo-dot { color: var(--green); }
+.nav-links {
+  display: flex; align-items: center; gap: 4px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 600;
+  color: var(--text-secondary); text-decoration: none;
+  padding: 8px 14px; border-radius: 8px;
+  transition: all 0.2s; letter-spacing: 0.5px; text-transform: uppercase;
+}
+.nav-links a:hover, .nav-links a.active {
+  color: var(--cyan); background: rgba(0,229,255,0.08);
+}
+.nav-cta {
+  display: flex; align-items: center; gap: 12px;
+}
+.hamburger {
+  display: none; flex-direction: column; gap: 5px; cursor: pointer;
+  padding: 8px; border: none; background: none;
+}
+.hamburger span {
+  width: 22px; height: 2px; background: var(--text-secondary);
+  border-radius: 2px; transition: all 0.3s;
+}
+.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+.mobile-menu {
+  display: none; position: fixed; top: 0; right: -100%;
+  width: min(320px, 85vw); height: 100vh;
+  background: rgba(6, 10, 24, 0.98); backdrop-filter: blur(20px);
+  border-left: 1px solid var(--border);
+  z-index: 200; transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
+  flex-direction: column; padding: 80px 28px 40px;
+  gap: 4px;
+}
+.mobile-menu.open { right: 0; }
+.mobile-menu a {
+  font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 600;
+  color: var(--text-secondary); text-decoration: none;
+  padding: 14px 16px; border-radius: 10px;
+  transition: all 0.2s; display: block; border: 1px solid transparent;
+  letter-spacing: 0.5px; text-transform: uppercase;
+}
+.mobile-menu a:hover { color: var(--cyan); background: rgba(0,229,255,0.06); border-color: var(--border); }
+.mobile-menu-close {
+  position: absolute; top: 20px; right: 20px; cursor: pointer;
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-secondary); font-size: 18px; transition: all 0.2s;
+}
+.mobile-menu-close:hover { color: var(--cyan); border-color: var(--border-bright); }
+.mobile-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  z-index: 199; backdrop-filter: blur(2px);
+}
+.mobile-overlay.open { display: block; }
 
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      font-weight:900;
-      letter-spacing:.4px;
-      text-transform:uppercase;
-      text-decoration:none;
-      color:inherit;
-    }
-    .brand-mark{
-      width:46px;
-      height:46px;
-      border-radius:16px;
-      display:grid;
-      place-items:center;
-      background:linear-gradient(135deg, rgba(55,216,255,.2), rgba(51,240,165,.14));
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 10px 30px rgba(0,0,0,.3);
-      overflow:hidden;
-      flex:0 0 auto;
-    }
-    .brand-mark img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-    }
-    .brand span{font-size:1.15rem}
-    .brand .accent{color:var(--accent)}
+/* ── BUTTONS ── */
+.btn-primary {
+  font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 11px 24px; border-radius: 10px; border: none; cursor: pointer;
+  background: linear-gradient(135deg, var(--cyan), var(--blue));
+  color: #000; text-decoration: none; display: inline-flex;
+  align-items: center; gap: 8px;
+  box-shadow: 0 0 20px rgba(0,229,255,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+  transition: all 0.25s;
+  position: relative; overflow: hidden;
+}
+.btn-primary::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, var(--green), var(--cyan));
+  opacity: 0; transition: opacity 0.25s;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 35px rgba(0,229,255,0.5), 0 8px 20px rgba(0,0,0,0.3);
+}
+.btn-primary:hover::after { opacity: 1; }
+.btn-primary span { position: relative; z-index: 1; }
+.btn-primary:active { transform: translateY(0); }
 
-    .menu-btn{
-      width:50px;height:50px;border-radius:16px;
-      border:1px solid rgba(255,255,255,.08);
-      background:rgba(255,255,255,.03);
-      display:grid;place-items:center;cursor:pointer;
-      transition:.25s ease;
-    }
-    .menu-btn:hover{transform:translateY(-2px);background:rgba(255,255,255,.06)}
-    .menu-btn i,
-    .menu-btn i::before,
-    .menu-btn i::after{
-      content:"";
-      display:block;
-      width:22px;height:2px;border-radius:999px;background:#fff;
-      position:relative;
-    }
-    .menu-btn i::before{position:absolute;top:-7px;left:0}
-    .menu-btn i::after{position:absolute;top:7px;left:0}
+.btn-secondary {
+  font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 11px 24px; border-radius: 10px; cursor: pointer;
+  background: rgba(0,229,255,0.06); color: var(--cyan);
+  border: 1px solid rgba(0,229,255,0.25); text-decoration: none;
+  display: inline-flex; align-items: center; gap: 8px;
+  transition: all 0.25s;
+}
+.btn-secondary:hover {
+  background: rgba(0,229,255,0.12); border-color: var(--cyan);
+  box-shadow: var(--glow-cyan); transform: translateY(-2px);
+}
 
-    .hero{
-      display:grid;
-      grid-template-columns:1.02fr .98fr;
-      gap:28px;
-      padding:34px 0 24px;
-      align-items:center;
-    }
+.btn-ghost {
+  font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 600;
+  letter-spacing: 0.5px; color: var(--text-secondary);
+  background: none; border: none; cursor: pointer;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 0; transition: color 0.2s;
+}
+.btn-ghost:hover { color: var(--cyan); }
 
-    .eyebrow{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding:10px 14px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.09);
-      background:rgba(255,255,255,.04);
-      color:#edf8ff;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
-      margin-bottom:20px;
-    }
-    .dot{
-      width:10px;height:10px;border-radius:50%;
-      background:var(--accent2);
-      box-shadow:0 0 0 6px rgba(51,240,165,.11);
-    }
+.btn-lg {
+  font-size: 16px; padding: 16px 36px; border-radius: 12px;
+}
+.btn-xl {
+  font-size: 18px; padding: 20px 48px; border-radius: 14px;
+  letter-spacing: 2px;
+}
 
-    h1{
-      margin:0;
-      font-size:clamp(3rem, 7vw, 6rem);
-      line-height:.92;
-      letter-spacing:-.055em;
-    }
-    .grad{
-      background:linear-gradient(90deg, #fff 0%, #dff9ff 35%, #3dd9ff 68%, #33f0a5 100%);
-      -webkit-background-clip:text;
-      background-clip:text;
-      color:transparent;
-    }
-    .sub{
-      margin:18px 0 0;
-      max-width:58ch;
-      font-size:1.02rem;
-      line-height:1.8;
-      color:var(--muted);
-    }
+/* ── SECTION BASE ── */
+section { position: relative; z-index: 1; }
+.container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
 
-    .actions{
-      display:flex;
-      flex-wrap:wrap;
-      gap:14px;
-      margin-top:28px;
-    }
+.section-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  font-weight: 500; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--cyan); background: rgba(0,229,255,0.08);
+  border: 1px solid rgba(0,229,255,0.2);
+  padding: 6px 14px; border-radius: 20px; margin-bottom: 16px;
+}
+.section-title {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 800; line-height: 1.15;
+  margin-bottom: 16px;
+}
+.section-title .accent { color: var(--cyan); }
+.section-title .accent-green { color: var(--green); }
+.section-sub {
+  font-size: 17px; color: var(--text-secondary); line-height: 1.7;
+  max-width: 600px;
+}
 
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      padding:15px 22px;
-      border-radius:18px;
-      text-decoration:none;
-      font-weight:800;
-      border:0;
-      transition:.25s ease;
-      cursor:pointer;
-      letter-spacing:.2px;
-    }
-    .btn:hover{transform:translateY(-3px)}
-    .btn-primary{
-      color:#04111a;
-      background:linear-gradient(135deg, var(--accent2), var(--accent));
-      box-shadow:0 14px 30px rgba(55,216,255,.18);
-    }
-    .btn-secondary{
-      color:var(--text);
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.12);
-    }
+/* ── HERO ── */
+#hero {
+  min-height: 92vh;
+  display: flex; align-items: center;
+  padding: 80px 0 60px;
+  position: relative; overflow: hidden;
+}
+.hero-inner {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 60px; align-items: center;
+}
+.hero-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  font-weight: 500; letter-spacing: 2px; color: var(--green);
+  background: rgba(0,255,157,0.08); border: 1px solid rgba(0,255,157,0.2);
+  padding: 6px 14px; border-radius: 20px; margin-bottom: 24px;
+}
+.hero-title {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(34px, 4.5vw, 58px);
+  font-weight: 900; line-height: 1.08;
+  margin-bottom: 20px; letter-spacing: -0.5px;
+}
+.hero-title .line1 { color: var(--text-primary); }
+.hero-title .line2 {
+  background: linear-gradient(90deg, var(--cyan), var(--blue-bright));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-title .line3 { color: var(--green); font-size: 85%; }
+.hero-desc {
+  font-size: 17px; color: var(--text-secondary); line-height: 1.75;
+  margin-bottom: 36px; max-width: 520px;
+}
+.hero-desc strong { color: var(--text-primary); font-weight: 600; }
+.hero-btns { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 44px; }
+.hero-badges {
+  display: flex; gap: 12px; flex-wrap: wrap;
+}
+.hero-badge {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 13px; font-weight: 500; color: var(--text-secondary);
+}
+.hero-badge .dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+  flex-shrink: 0;
+}
 
-    .hero-card{
-      position:relative;
-      min-height:560px;
-      border-radius:36px;
-      background:linear-gradient(180deg, rgba(10,15,35,.9), rgba(7,10,24,.75));
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-      padding:22px;
-    }
-    .hero-card::before{
-      content:"";
-      position:absolute;inset:-2px;
-      background:
-        radial-gradient(circle at 18% 18%, rgba(55,216,255,.18), transparent 35%),
-        radial-gradient(circle at 82% 16%, rgba(51,240,165,.14), transparent 34%);
-      pointer-events:none;
-    }
+/* ── DASHBOARD MOCKUP ── */
+.dashboard-mockup {
+  background: rgba(6,20,45,0.85);
+  border: 1px solid var(--border-bright);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(0,229,255,0.12), 0 30px 80px rgba(0,0,0,0.5);
+  position: relative;
+}
+.dash-topbar {
+  background: rgba(0,229,255,0.05);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 18px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.dash-title-row { display: flex; align-items: center; gap: 10px; }
+.dash-server-name {
+  font-family: 'Orbitron', monospace; font-size: 13px;
+  font-weight: 700; color: var(--cyan);
+}
+.dash-status {
+  font-size: 11px; font-weight: 700; padding: 3px 10px;
+  border-radius: 20px; letter-spacing: 1px; text-transform: uppercase;
+}
+.dash-status.online {
+  background: rgba(0,255,157,0.12); color: var(--green);
+  border: 1px solid rgba(0,255,157,0.3);
+  animation: status-pulse 2s ease-in-out infinite;
+}
+@keyframes status-pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+.dash-controls { display: flex; gap: 8px; }
+.dash-btn {
+  font-size: 11px; font-weight: 700; padding: 5px 12px;
+  border-radius: 6px; border: 1px solid; cursor: pointer;
+  transition: all 0.2s; letter-spacing: 0.5px;
+}
+.dash-btn.start { color: var(--green); border-color: rgba(0,255,157,0.3); background: rgba(0,255,157,0.08); }
+.dash-btn.stop { color: #ff5a5a; border-color: rgba(255,90,90,0.3); background: rgba(255,90,90,0.08); }
+.dash-btn.restart { color: var(--cyan); border-color: rgba(0,229,255,0.3); background: rgba(0,229,255,0.08); }
+.dash-body { padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+.dash-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.dash-metric {
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px;
+}
+.dash-metric-label {
+  font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--text-muted); margin-bottom: 6px; font-weight: 600;
+}
+.dash-metric-value {
+  font-family: 'Orbitron', monospace; font-size: 18px;
+  font-weight: 700; color: var(--text-primary);
+}
+.dash-metric-value.green { color: var(--green); }
+.dash-metric-value.cyan { color: var(--cyan); }
+.dash-bar-row { display: flex; flex-direction: column; gap: 8px; }
+.dash-bar-item { display: flex; flex-direction: column; gap: 5px; }
+.dash-bar-header {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 12px;
+}
+.dash-bar-label { color: var(--text-muted); font-weight: 600; letter-spacing: 0.5px; }
+.dash-bar-val { color: var(--text-primary); font-weight: 700; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+.dash-bar-track {
+  height: 5px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden;
+}
+.dash-bar-fill {
+  height: 100%; border-radius: 3px;
+  background: linear-gradient(90deg, var(--cyan), var(--blue));
+  box-shadow: 0 0 8px rgba(0,229,255,0.5);
+  transition: width 2s ease;
+}
+.dash-bar-fill.green { background: linear-gradient(90deg, var(--green), var(--cyan)); }
+.dash-console {
+  background: rgba(0,0,0,0.5); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px; font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px; height: 80px; overflow: hidden;
+}
+.console-line { color: var(--text-muted); margin-bottom: 3px; }
+.console-line .ts { color: var(--text-muted); opacity: 0.6; }
+.console-line .info { color: var(--cyan); }
+.console-line .ok { color: var(--green); }
+.console-line .warn { color: #ffcc44; }
+.dash-footer-row {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 11px; color: var(--text-muted);
+}
+.dash-players { display: flex; align-items: center; gap: 6px; }
+.dash-players .icon { color: var(--cyan); }
 
-    .phone-shell{
-      position:absolute;
-      inset:22px 22px 22px 22px;
-      border-radius:34px;
-      background:linear-gradient(180deg, rgba(15,20,42,.95), rgba(8,10,20,.95));
-      border:1px solid rgba(255,255,255,.09);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 24px 60px rgba(0,0,0,.38);
-      overflow:hidden;
-    }
-    .phone-top{
-      height:68px;
-      padding:14px 16px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      border-bottom:1px solid rgba(255,255,255,.05);
-      background:rgba(255,255,255,.02);
-    }
-    .mini-brand{
-      display:flex;align-items:center;gap:10px;font-weight:800;
-    }
-    .mini-brand .x{
-      width:30px;height:30px;border-radius:10px;
-      background:linear-gradient(135deg, rgba(55,216,255,.22), rgba(51,240,165,.16));
-      display:grid;place-items:center;
-      border:1px solid rgba(255,255,255,.08);
-    }
-    .mini-brand span{font-size:.95rem}
-    .pill{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:8px 12px;border-radius:999px;
-      background:rgba(51,240,165,.12);
-      border:1px solid rgba(51,240,165,.18);
-      color:#d7ffe9;font-size:.85rem;font-weight:800;
-    }
+/* ── TRUST STRIP ── */
+.trust-strip {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: rgba(0,229,255,0.02);
+  padding: 20px 0;
+}
+.trust-strip-inner {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0; flex-wrap: wrap;
+}
+.trust-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 28px; border-right: 1px solid var(--border);
+  color: var(--text-secondary); font-size: 14px; font-weight: 600;
+}
+.trust-item:last-child { border-right: none; }
+.trust-item .t-icon { font-size: 20px; }
+.trust-item span { color: var(--text-primary); }
 
-    .phone-body{
-      padding:18px 16px 16px;
-      height:calc(100% - 68px);
-      overflow:auto;
-    }
+/* ── STATS ── */
+#stats { padding: 80px 0; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.stat-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 32px 24px; text-align: center;
+  backdrop-filter: blur(10px); transition: all 0.3s;
+  position: relative; overflow: hidden;
+}
+.stat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 2px; background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+.stat-card:hover { border-color: var(--border-bright); box-shadow: var(--glow-cyan); transform: translateY(-4px); }
+.stat-card:hover::before { opacity: 1; }
+.stat-icon { font-size: 32px; margin-bottom: 12px; }
+.stat-number {
+  font-family: 'Orbitron', monospace; font-size: 38px; font-weight: 900;
+  color: var(--cyan); line-height: 1; margin-bottom: 8px;
+}
+.stat-label { font-size: 14px; color: var(--text-muted); letter-spacing: 0.5px; font-weight: 600; }
 
-    .big-title{
-      font-size:clamp(2rem, 4vw, 3.2rem);
-      font-weight:900;
-      line-height:1.02;
-      letter-spacing:-.05em;
-      margin:0 0 16px;
-    }
+/* ── FEATURES ── */
+#features { padding: 90px 0; }
+.features-header { text-align: center; margin-bottom: 60px; }
+.features-header .section-sub { margin: 0 auto; }
+.features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.feature-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 28px 22px;
+  backdrop-filter: blur(10px); transition: all 0.3s; position: relative; overflow: hidden;
+}
+.feature-card::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(0,229,255,0.05), transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+.feature-card:hover { border-color: var(--border-bright); transform: translateY(-6px); box-shadow: var(--glow-cyan); }
+.feature-card:hover::after { opacity: 1; }
+.feature-icon {
+  width: 52px; height: 52px; border-radius: 12px;
+  background: linear-gradient(135deg, rgba(0,229,255,0.15), rgba(0,102,255,0.1));
+  border: 1px solid rgba(0,229,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; margin-bottom: 18px; transition: all 0.3s;
+}
+.feature-card:hover .feature-icon {
+  background: linear-gradient(135deg, rgba(0,229,255,0.25), rgba(0,102,255,0.2));
+  box-shadow: 0 0 20px rgba(0,229,255,0.2);
+}
+.feature-title {
+  font-family: 'Orbitron', monospace; font-size: 14px; font-weight: 700;
+  color: var(--text-primary); margin-bottom: 10px; letter-spacing: 0.5px;
+}
+.feature-desc { font-size: 13.5px; color: var(--text-secondary); line-height: 1.65; }
 
-    .banner-card{
-      border-radius:26px;
-      padding:18px;
-      background:linear-gradient(135deg, rgba(55,216,255,.2), rgba(51,240,165,.15));
-      border:1px solid rgba(255,255,255,.1);
-      margin:18px 0;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
-    }
-    .banner-card h3{margin:0;font-size:1.15rem}
-    .banner-card p{margin:8px 0 0;color:rgba(255,255,255,.86);line-height:1.6}
+/* ── PANEL PREVIEW SECTION ── */
+#panel { padding: 90px 0; }
+.panel-inner { display: grid; grid-template-columns: 1fr 1.5fr; gap: 60px; align-items: center; }
+.panel-text { }
+.panel-screenshot {
+  background: rgba(6,20,45,0.9); border: 1px solid var(--border-bright);
+  border-radius: 18px; overflow: hidden;
+  box-shadow: 0 0 60px rgba(0,229,255,0.1), 0 30px 60px rgba(0,0,0,0.5);
+}
+.panel-tabs {
+  background: rgba(0,229,255,0.04); border-bottom: 1px solid var(--border);
+  padding: 10px 16px; display: flex; gap: 4px;
+}
+.panel-tab {
+  font-size: 11.5px; font-weight: 700; letter-spacing: 0.5px;
+  padding: 6px 14px; border-radius: 6px; cursor: pointer;
+  color: var(--text-muted); transition: all 0.2s; border: 1px solid transparent;
+}
+.panel-tab.active {
+  color: var(--cyan); background: rgba(0,229,255,0.1);
+  border-color: rgba(0,229,255,0.25);
+}
+.panel-content { padding: 18px; }
+.panel-file-list { display: flex; flex-direction: column; gap: 6px; }
+.panel-file {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: 8px;
+  background: rgba(255,255,255,0.02); border: 1px solid transparent;
+  font-size: 12.5px; cursor: pointer; transition: all 0.2s;
+}
+.panel-file:hover { background: rgba(0,229,255,0.06); border-color: var(--border); }
+.panel-file .f-icon { font-size: 14px; }
+.panel-file .f-name { color: var(--text-primary); font-weight: 600; flex: 1; font-family: 'JetBrains Mono', monospace; }
+.panel-file .f-size { color: var(--text-muted); font-size: 11px; }
+.panel-management-chips {
+  display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px;
+}
+.mgmt-chip {
+  font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
+  padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border);
+  color: var(--text-secondary); background: rgba(255,255,255,0.03);
+  transition: all 0.2s; cursor: default;
+}
+.mgmt-chip:hover { color: var(--cyan); border-color: rgba(0,229,255,0.3); background: rgba(0,229,255,0.06); }
 
-    .feature-list{
-      display:grid;
-      gap:12px;
-      margin-top:16px;
-    }
-    .feature-item{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      padding:14px 16px;
-      border-radius:20px;
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);
-    }
-    .ico{
-      width:38px;height:38px;border-radius:14px;
-      display:grid;place-items:center;
-      background:linear-gradient(135deg, rgba(55,216,255,.16), rgba(51,240,165,.12));
-      border:1px solid rgba(255,255,255,.08);
-      flex:0 0 auto;
-    }
-    .feature-item strong{display:block}
-    .feature-item small{display:block;color:var(--muted);margin-top:4px}
+/* ── HOW IT WORKS ── */
+#how { padding: 90px 0; }
+.how-header { text-align: center; margin-bottom: 60px; }
+.steps-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; position: relative; }
+.steps-row::before {
+  content: ''; position: absolute; top: 32px; left: 12.5%; right: 12.5%;
+  height: 1px; background: linear-gradient(90deg, transparent, var(--cyan), var(--blue), var(--cyan), transparent);
+  opacity: 0.3; z-index: 0;
+}
+.step-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 32px 22px; text-align: center;
+  backdrop-filter: blur(10px); position: relative; z-index: 1; transition: all 0.3s;
+}
+.step-card:hover { border-color: var(--border-bright); box-shadow: var(--glow-cyan); transform: translateY(-6px); }
+.step-num {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, rgba(0,229,255,0.2), rgba(0,102,255,0.15));
+  border: 1px solid rgba(0,229,255,0.35);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Orbitron', monospace; font-size: 20px; font-weight: 900;
+  color: var(--cyan); margin: 0 auto 18px;
+  box-shadow: 0 0 20px rgba(0,229,255,0.15);
+}
+.step-icon { font-size: 24px; margin-bottom: 14px; }
+.step-title {
+  font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 700;
+  color: var(--text-primary); margin-bottom: 10px; letter-spacing: 0.5px;
+}
+.step-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
 
-    .stats{
-      display:grid;
-      grid-template-columns:repeat(4, 1fr);
-      gap:16px;
-      margin:14px 0 34px;
-    }
-    .stat{
-      padding:18px;
-      border-radius:24px;
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
-    }
-    .stat .label{color:var(--muted);font-size:.92rem;margin-bottom:10px}
-    .stat .value{font-size:2rem;font-weight:900;letter-spacing:-.04em}
-    .stat .hint{margin-top:6px;color:rgba(255,255,255,.58);font-size:.9rem}
+/* ── VIDEO SECTION ── */
+#video { padding: 90px 0; }
+.video-header { text-align: center; margin-bottom: 50px; }
+.video-wrapper {
+  background: rgba(6,20,45,0.9); border: 1px solid var(--border-bright);
+  border-radius: 20px; overflow: hidden; position: relative;
+  box-shadow: 0 0 60px rgba(0,229,255,0.12), 0 30px 60px rgba(0,0,0,0.5);
+  max-width: 900px; margin: 0 auto 40px;
+  aspect-ratio: 16/9;
+}
+.video-placeholder {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #040d1e, #060f28, #040d1e);
+  cursor: pointer; position: relative; overflow: hidden;
+}
+.video-placeholder::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, rgba(0,229,255,0.08) 0%, transparent 70%);
+}
+.video-play-btn {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--cyan), var(--blue));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px; box-shadow: 0 0 40px rgba(0,229,255,0.5);
+  transition: all 0.3s; margin-bottom: 20px; position: relative; z-index: 1;
+}
+.video-play-btn:hover { transform: scale(1.1); box-shadow: 0 0 60px rgba(0,229,255,0.7); }
+.video-placeholder-text {
+  font-family: 'Orbitron', monospace; font-size: 16px; font-weight: 700;
+  color: var(--text-secondary); letter-spacing: 1px; position: relative; z-index: 1;
+}
+.video-embed {
+  width: 100%; height: 100%; border: none; display: none;
+}
+.video-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 900px; margin: 0 auto; }
+.video-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px 20px;
+  backdrop-filter: blur(10px); display: flex; align-items: flex-start; gap: 14px;
+  transition: all 0.3s;
+}
+.video-card:hover { border-color: var(--border-bright); box-shadow: var(--glow-cyan); }
+.video-card-icon { font-size: 28px; flex-shrink: 0; }
+.video-card-title {
+  font-family: 'Orbitron', monospace; font-size: 12px; font-weight: 700;
+  color: var(--text-primary); margin-bottom: 6px; letter-spacing: 0.5px;
+}
+.video-card-desc { font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; }
 
-    .section{padding:12px 0 18px}
-    .section-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:end;
-      gap:18px;
-      margin-bottom:18px;
-    }
-    .section-head h2{
-      margin:0;
-      font-size:clamp(1.6rem, 4vw, 2.5rem);
-      letter-spacing:-.03em;
-    }
-    .section-head p{
-      margin:0;
-      max-width:62ch;
-      color:var(--muted);
-      line-height:1.7;
-    }
+/* ── RAM CALCULATOR ── */
+#calculator { padding: 90px 0; }
+.calc-header { text-align: center; margin-bottom: 50px; }
+.calc-box {
+  background: rgba(6,20,45,0.85); border: 1px solid var(--border-bright);
+  border-radius: 20px; padding: 40px; backdrop-filter: blur(15px);
+  max-width: 900px; margin: 0 auto;
+  box-shadow: 0 0 50px rgba(0,229,255,0.08);
+}
+.calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.calc-left, .calc-right { display: flex; flex-direction: column; gap: 24px; }
+.calc-field { }
+.calc-label {
+  font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--text-muted); margin-bottom: 10px; display: block;
+}
+.calc-select {
+  width: 100%; padding: 12px 16px; border-radius: 10px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border-bright);
+  color: var(--text-primary); font-family: 'Rajdhani', sans-serif;
+  font-size: 15px; font-weight: 600; cursor: pointer; outline: none;
+  appearance: none; transition: all 0.2s;
+}
+.calc-select:focus { border-color: var(--cyan); box-shadow: 0 0 0 2px rgba(0,229,255,0.1); }
+.calc-select option { background: #040d1e; color: var(--text-primary); }
+.slider-row { display: flex; align-items: center; gap: 14px; }
+.calc-slider {
+  flex: 1; -webkit-appearance: none; height: 5px;
+  background: rgba(255,255,255,0.08); border-radius: 3px; outline: none;
+}
+.calc-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--cyan), var(--blue));
+  cursor: pointer; box-shadow: 0 0 10px rgba(0,229,255,0.5);
+}
+.slider-val {
+  font-family: 'Orbitron', monospace; font-size: 16px; font-weight: 700;
+  color: var(--cyan); min-width: 42px; text-align: right;
+}
+.toggle-row { display: flex; align-items: center; justify-content: space-between; }
+.toggle-label { font-size: 14px; color: var(--text-primary); font-weight: 600; }
+.toggle {
+  width: 46px; height: 24px; background: rgba(255,255,255,0.1);
+  border: 1px solid var(--border); border-radius: 12px;
+  cursor: pointer; position: relative; transition: all 0.3s;
+  flex-shrink: 0;
+}
+.toggle.on { background: rgba(0,229,255,0.3); border-color: var(--cyan); }
+.toggle::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--text-secondary); transition: all 0.3s;
+}
+.toggle.on::after { left: 25px; background: var(--cyan); }
+.calc-result {
+  background: rgba(0,0,0,0.4); border: 1px solid var(--border-bright);
+  border-radius: 14px; padding: 28px; text-align: center;
+}
+.result-label {
+  font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-muted); margin-bottom: 12px; font-weight: 700;
+}
+.result-ram {
+  font-family: 'Orbitron', monospace; font-size: 56px; font-weight: 900;
+  color: var(--cyan); line-height: 1; margin-bottom: 6px;
+  text-shadow: 0 0 30px rgba(0,229,255,0.5);
+}
+.result-unit { font-size: 20px; color: var(--text-muted); font-weight: 600; }
+.result-note { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-top: 14px; }
+.result-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 14px; }
+.result-chip {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+  padding: 5px 12px; border-radius: 20px;
+  background: rgba(0,229,255,0.08); border: 1px solid rgba(0,229,255,0.2);
+  color: var(--cyan);
+}
 
-    .cards{
-      display:grid;
-      grid-template-columns:repeat(3, 1fr);
-      gap:18px;
-    }
-    .card{
-      padding:22px;
-      border-radius:28px;
-      background:linear-gradient(180deg, rgba(14,20,43,.9), rgba(8,11,24,.88));
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow:var(--shadow);
-      transition:.25s ease;
-      overflow:hidden;
-      position:relative;
-    }
-    .card:hover{transform:translateY(-5px);border-color:rgba(55,216,255,.24)}
-    .card .icon{
-      width:54px;height:54px;border-radius:18px;
-      display:grid;place-items:center;
-      background:linear-gradient(135deg, rgba(55,216,255,.18), rgba(51,240,165,.14));
-      border:1px solid rgba(255,255,255,.08);
-      font-size:1.3rem;
-      margin-bottom:14px;
-    }
-    .card h3{margin:0 0 10px;font-size:1.15rem}
-    .card p{margin:0;color:var(--muted);line-height:1.7}
+/* ── ACCESS MODES ── */
+#access { padding: 90px 0; }
+.access-header { text-align: center; margin-bottom: 60px; }
+.access-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.access-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 18px; padding: 36px 28px; text-align: center;
+  backdrop-filter: blur(10px); transition: all 0.3s; position: relative; overflow: hidden;
+}
+.access-card.featured { border-color: var(--cyan); box-shadow: 0 0 30px rgba(0,229,255,0.15); }
+.access-card.featured::before {
+  content: 'RECOMMENDED'; position: absolute; top: 18px; right: -28px;
+  font-size: 10px; font-weight: 700; letter-spacing: 1px;
+  background: linear-gradient(90deg, var(--cyan), var(--blue));
+  color: #000; padding: 4px 40px; transform: rotate(45deg);
+}
+.access-card:hover { transform: translateY(-6px); border-color: var(--border-bright); box-shadow: var(--glow-cyan); }
+.access-icon { font-size: 42px; margin-bottom: 18px; }
+.access-title {
+  font-family: 'Orbitron', monospace; font-size: 16px; font-weight: 800;
+  color: var(--text-primary); margin-bottom: 10px; letter-spacing: 0.5px;
+}
+.access-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 22px; }
+.access-features { list-style: none; text-align: left; margin-bottom: 28px; display: flex; flex-direction: column; gap: 8px; }
+.access-features li {
+  font-size: 13.5px; color: var(--text-secondary);
+  display: flex; align-items: center; gap: 8px;
+}
+.access-features li::before { content: '✓'; color: var(--green); font-weight: 700; font-size: 14px; }
 
-    .calc{
-      display:grid;
-      grid-template-columns:1.02fr .98fr;
-      gap:18px;
-      align-items:stretch;
-    }
-    .calc-box{
-      padding:24px;
-      border-radius:30px;
-      background:linear-gradient(180deg, rgba(11,17,38,.92), rgba(8,10,22,.9));
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow:var(--shadow);
-    }
-    .field{margin-top:16px}
-    .field label{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:10px;
-      color:#eef4ff;
-      font-weight:700;
-      font-size:.95rem;
-    }
-    .field .subtext{color:var(--muted);font-size:.88rem;font-weight:500}
-    select, input[type="range"]{width:100%}
-    select{
-      appearance:none;
-      -webkit-appearance:none;
-      -moz-appearance:none;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.1);
-      background:rgba(255,255,255,.04);
-      color:var(--text);
-      padding:16px 16px;
-      font:inherit;
-      outline:none;
-    }
-    select option{color:#0a1020}
-    .range-row{
-      display:flex;
-      justify-content:space-between;
-      color:var(--muted);
-      font-size:.88rem;
-      margin-top:10px;
-    }
+/* ── COMPARISON ── */
+#comparison { padding: 90px 0; }
+.comparison-header { text-align: center; margin-bottom: 50px; }
+.comp-table-wrapper {
+  overflow-x: auto; border-radius: 16px;
+  border: 1px solid var(--border); box-shadow: 0 0 40px rgba(0,0,0,0.3);
+}
+table.comp-table { width: 100%; border-collapse: collapse; }
+.comp-table th, .comp-table td {
+  padding: 16px 22px; text-align: center; border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.comp-table thead tr { background: rgba(0,229,255,0.06); }
+.comp-table th {
+  font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 700;
+  letter-spacing: 0.5px; color: var(--text-primary);
+}
+.comp-table th.hdx { color: var(--cyan); }
+.comp-table td { color: var(--text-secondary); }
+.comp-table td.feature-name { text-align: left; font-weight: 600; color: var(--text-primary); }
+.comp-table tr:last-child td { border-bottom: none; }
+.comp-table tbody tr { background: var(--bg-card); transition: background 0.2s; }
+.comp-table tbody tr:nth-child(even) { background: rgba(6,20,45,0.5); }
+.comp-table tbody tr:hover { background: rgba(0,229,255,0.04); }
+.check-yes { color: var(--green); font-size: 18px; }
+.check-no { color: #ff5a5a; font-size: 18px; }
+.check-partial { color: #ffcc44; font-size: 16px; }
 
-    input[type="range"]{
-      accent-color:var(--accent);
-      height:10px;
-      background:transparent;
-    }
+/* ── SECURITY SECTION ── */
+#security { padding: 90px 0; }
+.security-header { text-align: center; margin-bottom: 60px; }
+.security-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.security-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 30px 24px;
+  backdrop-filter: blur(10px); transition: all 0.3s;
+  border-left: 3px solid rgba(0,255,157,0.3);
+}
+.security-card:hover { border-color: rgba(0,255,157,0.5); box-shadow: var(--glow-green); transform: translateY(-4px); }
+.security-icon { font-size: 32px; margin-bottom: 14px; }
+.security-title {
+  font-family: 'Orbitron', monospace; font-size: 14px; font-weight: 700;
+  color: var(--text-primary); margin-bottom: 8px; letter-spacing: 0.5px;
+}
+.security-desc { font-size: 13.5px; color: var(--text-secondary); line-height: 1.65; }
 
-    .toggle-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:10px;
-    }
-    .seg{
-      flex:1 1 140px;
-      padding:14px 16px;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.1);
-      background:rgba(255,255,255,.04);
-      color:var(--text);
-      text-align:center;
-      cursor:pointer;
-      font-weight:700;
-      transition:.22s ease;
-      user-select:none;
-    }
-    .seg.active{
-      background:linear-gradient(135deg, rgba(55,216,255,.2), rgba(51,240,165,.14));
-      border-color:rgba(55,216,255,.22);
-      box-shadow:0 10px 30px rgba(55,216,255,.08);
-    }
+/* ── PERFORMANCE ── */
+#performance { padding: 90px 0; }
+.perf-header { text-align: center; margin-bottom: 60px; }
+.perf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+.perf-metrics { display: flex; flex-direction: column; gap: 18px; }
+.perf-metric { }
+.perf-metric-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+.perf-metric-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.perf-metric-val { font-family: 'Orbitron', monospace; font-size: 14px; font-weight: 700; color: var(--cyan); }
+.perf-track { height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; }
+.perf-fill {
+  height: 100%; border-radius: 4px;
+  background: linear-gradient(90deg, var(--cyan), var(--blue));
+  box-shadow: 0 0 10px rgba(0,229,255,0.5);
+  transition: width 1.5s ease 0.3s;
+}
+.perf-fill.green { background: linear-gradient(90deg, var(--green), var(--cyan)); }
+.perf-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.perf-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 22px 18px; text-align: center;
+  transition: all 0.3s; backdrop-filter: blur(8px);
+}
+.perf-card:hover { border-color: var(--border-bright); box-shadow: var(--glow-cyan); }
+.perf-card-icon { font-size: 28px; margin-bottom: 10px; }
+.perf-card-val {
+  font-family: 'Orbitron', monospace; font-size: 24px; font-weight: 800;
+  color: var(--cyan); margin-bottom: 4px;
+}
+.perf-card-label { font-size: 12px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.5px; }
 
-    .result{
-      border-radius:30px;
-      padding:24px;
-      background:linear-gradient(145deg, rgba(55,216,255,.10), rgba(51,240,165,.08));
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow:var(--shadow);
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      gap:18px;
-    }
-    .result h3{margin:0;font-size:1.45rem}
-    .result p{margin:0;color:var(--muted);line-height:1.7}
-    .rec{
-      padding:18px;
-      border-radius:24px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.08);
-    }
-    .rec .k{color:var(--muted);font-size:.9rem}
-    .rec .v{
-      margin-top:8px;
-      font-size:clamp(2rem, 5vw, 3.2rem);
-      line-height:1;
-      font-weight:900;
-      letter-spacing:-.05em;
-    }
-    .chips{
-      display:flex;flex-wrap:wrap;gap:10px;
-    }
-    .chip{
-      padding:10px 12px;
-      border-radius:999px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.08);
-      color:#ecf5ff;
-      font-size:.9rem;
-      font-weight:700;
-    }
+/* ── SUPPORTED TYPES ── */
+#supported { padding: 90px 0; }
+.supported-header { text-align: center; margin-bottom: 50px; }
+.supported-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.support-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 24px 16px; text-align: center;
+  backdrop-filter: blur(8px); transition: all 0.3s; cursor: default;
+}
+.support-card:hover { border-color: var(--border-bright); box-shadow: var(--glow-cyan); transform: translateY(-4px); }
+.support-icon { font-size: 32px; margin-bottom: 12px; }
+.support-name {
+  font-family: 'Orbitron', monospace; font-size: 12px; font-weight: 700;
+  color: var(--text-primary); letter-spacing: 1px;
+}
+.support-desc { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
 
-    .compare{
-      margin-top:20px;
-      border-radius:32px;
-      padding:22px;
-      background:linear-gradient(180deg, rgba(9,13,28,.95), rgba(8,10,20,.9));
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow:var(--shadow);
-    }
-    .table{
-      display:grid;
-      gap:12px;
-    }
-    .row{
-      display:grid;
-      grid-template-columns:1.4fr .8fr .8fr .8fr;
-      gap:10px;
-      align-items:center;
-      padding:16px 18px;
-      border-radius:22px;
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);
-    }
-    .row.head{
-      background:rgba(255,255,255,.06);
-      font-weight:800;
-      color:#fff;
-    }
-    .ok{color:#bfffe0;font-weight:900}
-    .no{color:#ffc0ca;font-weight:900}
-    .muted{color:var(--muted)}
+/* ── DISCORD COMMUNITY ── */
+#community { padding: 90px 0; }
+.community-box {
+  background: linear-gradient(135deg, rgba(6,20,45,0.9), rgba(0,50,100,0.5));
+  border: 1px solid var(--border-bright);
+  border-radius: 24px; padding: 70px 50px; text-align: center;
+  position: relative; overflow: hidden;
+  box-shadow: 0 0 80px rgba(0,229,255,0.1);
+}
+.community-box::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, rgba(0,229,255,0.06) 0%, transparent 65%);
+}
+.community-discord-icon { font-size: 72px; margin-bottom: 24px; position: relative; z-index: 1; }
+.community-title {
+  font-family: 'Orbitron', monospace; font-size: clamp(26px, 3.5vw, 40px);
+  font-weight: 900; color: var(--text-primary); margin-bottom: 16px;
+  position: relative; z-index: 1;
+}
+.community-desc { font-size: 17px; color: var(--text-secondary); line-height: 1.7; max-width: 560px; margin: 0 auto 36px; position: relative; z-index: 1; }
+.community-stats { display: flex; justify-content: center; gap: 50px; margin-bottom: 40px; position: relative; z-index: 1; }
+.community-stat { text-align: center; }
+.community-stat-num {
+  font-family: 'Orbitron', monospace; font-size: 28px; font-weight: 900;
+  color: var(--cyan); display: block;
+}
+.community-stat-label { font-size: 12px; color: var(--text-muted); letter-spacing: 0.5px; font-weight: 600; }
+.community-btns { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; position: relative; z-index: 1; }
 
-    .cta{
-      margin:24px 0 6px;
-      padding:24px;
-      border-radius:32px;
-      background:linear-gradient(135deg, rgba(55,216,255,.14), rgba(51,240,165,.12));
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow:var(--shadow);
-      display:flex;
-      justify-content:space-between;
-      gap:18px;
-      align-items:center;
-    }
-    .cta h3{margin:0 0 8px;font-size:1.5rem}
-    .cta p{margin:0;color:rgba(255,255,255,.82);line-height:1.7;max-width:60ch}
+/* ── TESTIMONIALS ── */
+#testimonials { padding: 90px 0; }
+.test-header { text-align: center; margin-bottom: 60px; }
+.test-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.test-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 30px 26px;
+  backdrop-filter: blur(10px); transition: all 0.3s;
+  position: relative;
+}
+.test-card::before {
+  content: '"'; position: absolute; top: 20px; right: 24px;
+  font-size: 80px; color: var(--cyan); opacity: 0.08;
+  font-family: Georgia, serif; line-height: 1;
+}
+.test-card:hover { border-color: var(--border-bright); box-shadow: var(--glow-cyan); transform: translateY(-4px); }
+.test-stars { color: #ffcc44; font-size: 16px; margin-bottom: 14px; letter-spacing: 2px; }
+.test-text { font-size: 15px; color: var(--text-secondary); line-height: 1.75; margin-bottom: 20px; }
+.test-author { display: flex; align-items: center; gap: 12px; }
+.test-avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--cyan), var(--blue));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 700; color: #000;
+  flex-shrink: 0; font-family: 'Orbitron', monospace;
+}
+.test-name { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+.test-role { font-size: 12px; color: var(--text-muted); letter-spacing: 0.5px; }
 
-    .footer{
-      padding:30px 0 38px;
-      text-align:center;
-      color:rgba(255,255,255,.54);
-      font-size:.95rem;
-    }
+/* ── FAQ ── */
+#faq { padding: 90px 0; }
+.faq-header { text-align: center; margin-bottom: 60px; }
+.faq-list { max-width: 780px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+.faq-item {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden; backdrop-filter: blur(8px);
+  transition: border-color 0.2s;
+}
+.faq-item.open { border-color: rgba(0,229,255,0.25); }
+.faq-question {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 24px; cursor: pointer; gap: 14px;
+}
+.faq-q-text { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+.faq-icon {
+  width: 28px; height: 28px; border-radius: 6px;
+  background: rgba(0,229,255,0.08); border: 1px solid rgba(0,229,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--cyan); font-size: 16px; font-weight: 700;
+  flex-shrink: 0; transition: transform 0.3s;
+}
+.faq-item.open .faq-icon { transform: rotate(45deg); }
+.faq-answer {
+  max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s;
+  padding: 0 24px;
+}
+.faq-item.open .faq-answer { max-height: 200px; padding: 0 24px 20px; }
+.faq-answer p { font-size: 14px; color: var(--text-secondary); line-height: 1.75; }
+.faq-answer strong { color: var(--cyan); }
 
-    .reveal{
-      opacity:0;
-      transform:translateY(18px);
-      transition:opacity .7s ease, transform .7s ease;
-    }
-    .reveal.show{
-      opacity:1;
-      transform:translateY(0);
-    }
+/* ── FINAL CTA ── */
+#cta { padding: 100px 0; }
+.cta-box {
+  background: linear-gradient(135deg, rgba(0,229,255,0.06), rgba(0,102,255,0.08), rgba(0,255,157,0.04));
+  border: 1px solid var(--border-bright);
+  border-radius: 28px; padding: 90px 40px;
+  text-align: center; position: relative; overflow: hidden;
+}
+.cta-box::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(0,229,255,0.12) 0%, transparent 60%);
+}
+.cta-label { position: relative; z-index: 1; margin-bottom: 24px; display: inline-block; }
+.cta-title {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(30px, 4.5vw, 56px);
+  font-weight: 900; line-height: 1.1; margin-bottom: 20px;
+  position: relative; z-index: 1;
+}
+.cta-title .line1 { color: var(--text-primary); display: block; }
+.cta-title .line2 {
+  background: linear-gradient(90deg, var(--cyan), var(--green));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; display: block;
+}
+.cta-desc { font-size: 18px; color: var(--text-secondary); max-width: 520px; margin: 0 auto 40px; line-height: 1.7; position: relative; z-index: 1; }
+.cta-btns { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; position: relative; z-index: 1; }
+.cta-sub {
+  font-size: 13px; color: var(--text-muted); margin-top: 20px;
+  position: relative; z-index: 1;
+}
 
-    @media (max-width: 980px){
-      .hero, .stats, .cards, .calc{
-        grid-template-columns:1fr;
-      }
-      .section-head{
-        display:flex;
-        flex-direction:column;
-        align-items:start;
-      }
-      .cta{
-        flex-direction:column;
-        align-items:start;
-      }
-      .row{
-        grid-template-columns:1.2fr .7fr .7fr .7fr;
-      }
-    }
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 60px 0 30px;
+  background: rgba(3,7,18,0.6); backdrop-filter: blur(10px);
+}
+.footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 50px; }
+.footer-brand-logo {
+  font-family: 'Orbitron', monospace; font-size: 22px; font-weight: 900;
+  color: var(--cyan); display: flex; align-items: center; gap: 8px;
+  text-decoration: none; margin-bottom: 14px;
+}
+.footer-tagline { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 22px; max-width: 280px; }
+.footer-social { display: flex; gap: 10px; }
+.social-btn {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--text-secondary); text-decoration: none;
+  transition: all 0.2s;
+}
+.social-btn:hover { border-color: var(--border-bright); color: var(--cyan); background: rgba(0,229,255,0.08); }
+.footer-col-title {
+  font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-links a {
+  font-size: 14px; color: var(--text-secondary); text-decoration: none;
+  transition: color 0.2s; font-weight: 500;
+}
+.footer-links a:hover { color: var(--cyan); }
+.footer-bottom {
+  border-top: 1px solid var(--border); padding-top: 28px;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+}
+.footer-copy { font-size: 13px; color: var(--text-muted); }
+.footer-copy span { color: var(--cyan); }
+.footer-bottom-links { display: flex; gap: 20px; }
+.footer-bottom-links a { font-size: 13px; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+.footer-bottom-links a:hover { color: var(--cyan); }
 
-    @media (max-width: 720px){
-      .banner-row{
-        flex-direction:column;
-        align-items:flex-start;
-      }
-      .nav{padding:14px 0}
-      .brand span{font-size:1rem}
-      .brand-mark{width:40px;height:40px;border-radius:14px}
-      h1{font-size:clamp(2.6rem, 14vw, 4.5rem)}
-      .sub{font-size:.98rem}
-      .actions{flex-direction:column}
-      .btn{width:100%}
-      .hero-card{min-height:520px}
-      .phone-shell{inset:16px}
-      .cards{grid-template-columns:1fr}
-      .row{grid-template-columns:1fr 1fr; gap:8px}
-      .row.head{display:none}
-      .row > div{padding:4px 0}
-      .row > div:nth-child(1){grid-column:1 / -1}
-    }
-  </style>
+/* ── REVEAL ANIMATIONS ── */
+.reveal {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ── DIVIDER ── */
+.section-divider {
+  height: 1px; background: linear-gradient(90deg, transparent, var(--border-bright), transparent);
+  margin: 0;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: rgba(0,229,255,0.2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,229,255,0.4); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .steps-row { grid-template-columns: repeat(2, 1fr); }
+  .steps-row::before { display: none; }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+  .hero-inner { gap: 40px; }
+  .panel-inner { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .nav-links, .nav-cta { display: none; }
+  .hamburger { display: flex; }
+  .mobile-menu { display: flex; }
+  .hero-inner { grid-template-columns: 1fr; text-align: center; }
+  .hero-btns { justify-content: center; }
+  .hero-badges { justify-content: center; }
+  .dashboard-mockup { display: none; }
+  .calc-grid { grid-template-columns: 1fr; }
+  .access-grid { grid-template-columns: 1fr; }
+  .supported-grid { grid-template-columns: repeat(2, 1fr); }
+  .test-grid { grid-template-columns: 1fr; }
+  .perf-grid { grid-template-columns: 1fr; }
+  .community-stats { flex-direction: column; gap: 24px; }
+  .trust-strip-inner { flex-direction: column; gap: 0; }
+  .trust-item { border-right: none; border-bottom: 1px solid var(--border); width: 100%; justify-content: center; }
+  .trust-item:last-child { border-bottom: none; }
+  .announce-bar { flex-direction: column; gap: 8px; text-align: center; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .video-cards { grid-template-columns: 1fr; }
+  .security-grid { grid-template-columns: 1fr; }
+  .community-box { padding: 50px 24px; }
+  .cta-box { padding: 60px 24px; }
+  .calc-box { padding: 28px 20px; }
+  .comp-table th, .comp-table td { padding: 12px 14px; font-size: 12px; }
+}
+
+@media (max-width: 480px) {
+  .features-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .steps-row { grid-template-columns: 1fr; }
+  .perf-cards { grid-template-columns: 1fr; }
+  .supported-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-bottom { flex-direction: column; text-align: center; }
+  nav { padding: 0 16px; }
+}
+</style>
 </head>
 <body>
-  <div class="top-banner">
-    <div class="wrap banner-row">
-      <div class="badge">⚡ <strong>FREE ONLY</strong> <small>— no paid plan section, only free hosting</small></div>
-      <div class="badge">🎁 <strong>HDX-CLOUD</strong> <small>premium launch banner</small></div>
+
+<!-- BACKGROUND -->
+<div class="bg-decor" aria-hidden="true">
+  <div class="bg-grid"></div>
+  <div class="bg-blob bg-blob-1"></div>
+  <div class="bg-blob bg-blob-2"></div>
+  <div class="bg-blob bg-blob-3"></div>
+</div>
+
+<!-- MOBILE OVERLAY -->
+<div class="mobile-overlay" id="mobileOverlay" onclick="closeMobileMenu()"></div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu-close" onclick="closeMobileMenu()">✕</div>
+  <a href="#home" onclick="closeMobileMenu()">Home</a>
+  <a href="#features" onclick="closeMobileMenu()">Features</a>
+  <a href="#video" onclick="closeMobileMenu()">Video</a>
+  <a href="#calculator" onclick="closeMobileMenu()">Calculator</a>
+  <a href="#how" onclick="closeMobileMenu()">Setup</a>
+  <a href="#faq" onclick="closeMobileMenu()">FAQ</a>
+  <a href="#community" onclick="closeMobileMenu()">Discord</a>
+  <div style="margin-top:20px">
+    <a href="https://discord.gg/RJZgJFpASq" target="_blank" class="btn-primary" style="width:100%;justify-content:center;border-radius:10px;padding:14px;font-size:15px">
+      <span>🚀 Get Started Free</span>
+    </a>
+  </div>
+</div>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="announce-bar">
+  <div class="announce-text">
+    <span class="announce-dot"></span>
+    Free Minecraft hosting for everyone — <span>No paid plans. Ever.</span> — Join our Discord to get started instantly.
+  </div>
+  <div class="announce-badge">✦ 100% FREE</div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#home" class="nav-logo">
+    <div class="logo-icon">⬡</div>
+    HDX<span class="logo-dot">-CLOUD</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#home" class="active">Home</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#video">Video</a></li>
+    <li><a href="#calculator">Calculator</a></li>
+    <li><a href="#how">Setup</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#community">Discord</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="https://discord.gg/RJZgJFpASq" target="_blank" class="btn-primary">
+      <span>Get Started Free</span>
+    </a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ══════════════════════════════════════ -->
+<!-- HERO SECTION -->
+<!-- ══════════════════════════════════════ -->
+<section id="home">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-label reveal">
+          <span class="announce-dot"></span>
+          ⚡ Free Minecraft Hosting Platform
+        </div>
+        <h1 class="hero-title reveal">
+          <span class="line1">Free Minecraft</span>
+          <span class="line2">Hosting Built for</span>
+          <span class="line3">Speed & Stability</span>
+        </h1>
+        <p class="hero-desc reveal">
+          Launch your Minecraft server in <strong>under 2 minutes</strong>. Full mod support, instant SSD provisioning, DDoS protection, and a thriving <strong>Discord community</strong> — all completely free. Zero credit cards. Zero limits.
+        </p>
+        <div class="hero-btns reveal">
+          <a href="https://discord.gg/RJZgJFpASq" target="_blank" class="btn-primary btn-lg">
+            <span>🚀 Get Started Free</span>
+          </a>
+          <a href="#features" class="btn-secondary btn-lg">
+            <span>⬇ View Features</span>
+          </a>
+        </div>
+        <div class="hero-badges reveal">
+          <div class="hero-badge"><span class="dot"></span> 24/7 Support</div>
+          <div class="hero-badge"><span class="dot"></span> Instant Setup</div>
+          <div class="hero-badge"><span class="dot"></span> DDoS Protected</div>
+          <div class="hero-badge"><span class="dot"></span> Java & Bedrock</div>
+        </div>
+      </div>
+
+      <!-- DASHBOARD MOCKUP -->
+      <div class="hero-right reveal">
+        <div class="dashboard-mockup">
+          <div class="dash-topbar">
+            <div class="dash-title-row">
+              <div class="dash-server-name">⬡ HDX-CLOUD Server</div>
+              <div class="dash-status online">● Online</div>
+            </div>
+            <div class="dash-controls">
+              <button class="dash-btn start">Start</button>
+              <button class="dash-btn stop">Stop</button>
+              <button class="dash-btn restart">Restart</button>
+            </div>
+          </div>
+          <div class="dash-body">
+            <div class="dash-metrics">
+              <div class="dash-metric">
+                <div class="dash-metric-label">Uptime</div>
+                <div class="dash-metric-value green">99.8%</div>
+              </div>
+              <div class="dash-metric">
+                <div class="dash-metric-label">Players</div>
+                <div class="dash-metric-value cyan">12/20</div>
+              </div>
+              <div class="dash-metric">
+                <div class="dash-metric-label">RAM</div>
+                <div class="dash-metric-value">2 GB</div>
+              </div>
+            </div>
+            <div class="dash-bar-row">
+              <div class="dash-bar-item">
+                <div class="dash-bar-header">
+                  <span class="dash-bar-label">CPU Usage</span>
+                  <span class="dash-bar-val" id="cpuVal">34%</span>
+                </div>
+                <div class="dash-bar-track">
+                  <div class="dash-bar-fill" id="cpuBar" style="width:34%"></div>
+                </div>
+              </div>
+              <div class="dash-bar-item">
+                <div class="dash-bar-header">
+                  <span class="dash-bar-label">RAM Usage</span>
+                  <span class="dash-bar-val" id="ramVal">1.2 GB / 2 GB</span>
+                </div>
+                <div class="dash-bar-track">
+                  <div class="dash-bar-fill green" id="ramBar" style="width:60%"></div>
+                </div>
+              </div>
+              <div class="dash-bar-item">
+                <div class="dash-bar-header">
+                  <span class="dash-bar-label">Network</span>
+                  <span class="dash-bar-val">12 MB/s</span>
+                </div>
+                <div class="dash-bar-track">
+                  <div class="dash-bar-fill" style="width:28%"></div>
+                </div>
+              </div>
+            </div>
+            <div class="dash-console">
+              <div class="console-line"><span class="ts">[10:24:01]</span> <span class="info">[INFO]</span> Server started on port 25565</div>
+              <div class="console-line"><span class="ts">[10:24:03]</span> <span class="ok">[OK]</span> World loaded successfully</div>
+              <div class="console-line"><span class="ts">[10:24:05]</span> <span class="info">[INFO]</span> Player _HDXAlex joined the game</div>
+              <div class="console-line"><span class="ts">[10:24:08]</span> <span class="warn">[WARN]</span> Plugin update available: EssentialsX</div>
+              <div class="console-line"><span class="ts">[10:24:10]</span> <span class="ok">[OK]</span> DDoS shield: active</div>
+            </div>
+            <div class="dash-footer-row">
+              <div class="dash-players"><span class="icon">👥</span> 12 players online</div>
+              <div style="color:var(--green);font-weight:700;font-size:12px;font-family:'JetBrains Mono',monospace">◉ LIVE</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+</section>
 
-  <header class="topbar">
-    <div class="wrap nav">
-      <a class="brand" href="#top" aria-label="HDX-CLOUD logo">
-        <div class="brand-mark">
-          <img src="logo.png" alt="HDX-CLOUD Logo">
-        </div>
-        <span><span class="accent">HDX</span>-CLOUD</span>
-      </a>
-      <button class="menu-btn" aria-label="Open menu"><i></i></button>
+<!-- TRUST STRIP -->
+<div class="trust-strip">
+  <div class="container">
+    <div class="trust-strip-inner">
+      <div class="trust-item"><span class="t-icon">🛡️</span> <span>DDoS Protection</span></div>
+      <div class="trust-item"><span class="t-icon">⚡</span> <span>Instant Setup</span></div>
+      <div class="trust-item"><span class="t-icon">🕐</span> <span>24/7 Support</span></div>
+      <div class="trust-item"><span class="t-icon">💿</span> <span>SSD Storage</span></div>
+      <div class="trust-item"><span class="t-icon">🎮</span> <span>Java &amp; Bedrock</span></div>
+      <div class="trust-item"><span class="t-icon">💬</span> <span>Discord Community</span></div>
     </div>
-  </header>
+  </div>
+</div>
 
-  <main class="wrap" id="top">
-    <section class="hero">
-      <div class="reveal">
-        <div class="eyebrow"><span class="dot"></span> Free Minecraft hosting for everyone</div>
-        <h1>
-          <span class="grad">HDX-CLOUD</span><br />
-          premium hosting landing page.
-        </h1>
-        <p class="sub">
-          Ye design free hosting users ke liye hai. Isme strong branding, clean banner, feature cards,
-          calculator, aur mobile-friendly premium UI hai. Pricing plans ka block nahi hai.
-        </p>
-        <div class="actions">
-          <a class="btn btn-primary" href="#calculator">Open Calculator →</a>
-          <a class="btn btn-secondary" href="#features">See Features ✦</a>
+<!-- ══════════════════════════════════════ -->
+<!-- STATS -->
+<!-- ══════════════════════════════════════ -->
+<section id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card reveal">
+        <div class="stat-icon">👥</div>
+        <div class="stat-number" data-target="8400" data-suffix="+">0</div>
+        <div class="stat-label">Active Users</div>
+      </div>
+      <div class="stat-card reveal reveal-delay-1">
+        <div class="stat-icon">🖥️</div>
+        <div class="stat-number" data-target="3100" data-suffix="+">0</div>
+        <div class="stat-label">Servers Online</div>
+      </div>
+      <div class="stat-card reveal reveal-delay-2">
+        <div class="stat-icon">📈</div>
+        <div class="stat-number" data-target="99" data-suffix=".9%">0</div>
+        <div class="stat-label">Average Uptime</div>
+      </div>
+      <div class="stat-card reveal reveal-delay-3">
+        <div class="stat-icon">🚀</div>
+        <div class="stat-number" data-target="90" data-suffix="s">0</div>
+        <div class="stat-label">Avg Setup Time</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- FEATURES -->
+<!-- ══════════════════════════════════════ -->
+<section id="features">
+  <div class="container">
+    <div class="features-header reveal">
+      <div class="section-label">⚙ Platform Features</div>
+      <h2 class="section-title">Everything You Need, <span class="accent">Nothing to Pay</span></h2>
+      <p class="section-sub">A complete hosting stack — powerful features, no subscriptions, no hidden costs. Just your server, ready to go.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">Instant Server Creation</div>
+        <p class="feature-desc">Go from zero to server in under 90 seconds. Automated provisioning gets your world online before your coffee's cold.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon">🛡️</div>
+        <div class="feature-title">DDoS Protection</div>
+        <p class="feature-desc">Enterprise-grade attack mitigation keeps your server running smooth even under heavy traffic spikes. Always online.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon">💬</div>
+        <div class="feature-title">24/7 Community Support</div>
+        <p class="feature-desc">Our active Discord community and staff team are online around the clock. Help is always one message away.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-3">
+        <div class="feature-icon">💾</div>
+        <div class="feature-title">NVMe SSD Storage</div>
+        <p class="feature-desc">Ultra-fast solid-state storage means minimal chunk lag, faster world loads, and snappy file operations every time.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🎮</div>
+        <div class="feature-title">Java &amp; Bedrock Support</div>
+        <p class="feature-desc">Run Java Edition or Bedrock Edition servers — your choice. Fully optimized environments for both platforms.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon">🔌</div>
+        <div class="feature-title">Plugin Friendly</div>
+        <p class="feature-desc">Full support for Spigot, Paper, and Bukkit plugin ecosystems. Install from our library or upload your own JARs.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon">📦</div>
+        <div class="feature-title">Modpack Ready</div>
+        <p class="feature-desc">Forge, Fabric, and popular modpack support built in. Launch a Pixelmon, ATM9, or SkyFactory world with ease.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-3">
+        <div class="feature-icon">📡</div>
+        <div class="feature-title">Low-Latency Performance</div>
+        <p class="feature-desc">Optimized network routing and fast node infrastructure ensures your players experience buttery-smooth gameplay.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- PANEL PREVIEW -->
+<!-- ══════════════════════════════════════ -->
+<section id="panel">
+  <div class="container">
+    <div class="panel-inner">
+      <div class="panel-text reveal">
+        <div class="section-label">🖥 Control Panel</div>
+        <h2 class="section-title">Full Control.<br><span class="accent">Zero Complexity.</span></h2>
+        <p class="section-sub" style="margin-bottom:30px">Your server, your rules. The intuitive HDX-CLOUD panel puts everything at your fingertips — no technical knowledge needed.</p>
+        <div class="panel-management-chips">
+          <span class="mgmt-chip">▶ Start</span>
+          <span class="mgmt-chip">■ Stop</span>
+          <span class="mgmt-chip">↺ Restart</span>
+          <span class="mgmt-chip">🔄 Reinstall</span>
+          <span class="mgmt-chip">📁 Files</span>
+          <span class="mgmt-chip">🔌 Plugins</span>
+          <span class="mgmt-chip">📋 Console</span>
+          <span class="mgmt-chip">📊 Logs</span>
+          <span class="mgmt-chip">💾 Backup</span>
+          <span class="mgmt-chip">👥 Players</span>
+          <span class="mgmt-chip">⚙ RAM Config</span>
+          <span class="mgmt-chip">🔁 Update</span>
+        </div>
+        <div style="margin-top:30px">
+          <a href="https://discord.gg/RJZgJFpASq" target="_blank" class="btn-primary">
+            <span>Access Panel → Discord</span>
+          </a>
         </div>
       </div>
-
-      <div class="hero-card reveal">
-        <div class="phone-shell">
-          <div class="phone-top">
-            <div class="mini-brand">
-              <div class="x">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true">
-                  <path d="M5 17L10 7h4L9 17H5Z" fill="#fff"/>
-                  <path d="M11 17L16 7h3l-5 10h-3Z" fill="#37d8ff"/>
-                </svg>
-              </div>
-              <span>HDX-CLOUD</span>
-            </div>
-            <div class="pill">Online 24/7</div>
+      <div class="panel-screenshot reveal reveal-delay-2">
+        <div class="panel-tabs">
+          <div class="panel-tab active">📁 File Manager</div>
+          <div class="panel-tab">📋 Console</div>
+          <div class="panel-tab">⚙ Settings</div>
+          <div class="panel-tab">🔌 Plugins</div>
+        </div>
+        <div class="panel-content">
+          <div class="panel-file-list">
+            <div class="panel-file"><span class="f-icon">📁</span><span class="f-name">plugins/</span><span class="f-size">DIR</span></div>
+            <div class="panel-file"><span class="f-icon">📁</span><span class="f-name">world/</span><span class="f-size">DIR</span></div>
+            <div class="panel-file"><span class="f-icon">📄</span><span class="f-name">server.properties</span><span class="f-size">2.1 KB</span></div>
+            <div class="panel-file"><span class="f-icon">☕</span><span class="f-name">server.jar</span><span class="f-size">44.2 MB</span></div>
+            <div class="panel-file"><span class="f-icon">📄</span><span class="f-name">ops.json</span><span class="f-size">0.4 KB</span></div>
+            <div class="panel-file"><span class="f-icon">📄</span><span class="f-name">whitelist.json</span><span class="f-size">0.2 KB</span></div>
+            <div class="panel-file"><span class="f-icon">📋</span><span class="f-name">latest.log</span><span class="f-size">128 KB</span></div>
           </div>
-
-          <div class="phone-body">
-            <h2 class="big-title">Minecraft Server<br/>Hosting Made<br/>Easy!</h2>
-
-            <div class="banner-card">
-              <h3>Free hosting for everyone</h3>
-              <p>No pricing plans on this page. Just clean branding, strong CTA, and a simple setup flow.</p>
-            </div>
-
-            <div class="feature-list">
-              <div class="feature-item">
-                <div class="ico">⚙️</div>
-                <div><strong>Java &amp; Bedrock</strong><small>Both edition support feel</small></div>
-              </div>
-              <div class="feature-item">
-                <div class="ico">🧩</div>
-                <div><strong>1-Click Plugins</strong><small>Mods / plugins / presets style cards</small></div>
-              </div>
-              <div class="feature-item">
-                <div class="ico">🛡️</div>
-                <div><strong>DDoS Protection</strong><small>Safer and more stable hosting feel</small></div>
-              </div>
-            </div>
-
-            <div style="height:14px"></div>
-            <a class="btn btn-primary" href="#calculator" style="width:100%">Start Free Server</a>
-          </div>
         </div>
       </div>
-    </section>
+    </div>
+  </div>
+</section>
 
-    <section class="stats reveal" aria-label="Server overview">
-      <div class="stat">
-        <div class="label">Free users online</div>
-        <div class="value" id="onlineCount">128</div>
-        <div class="hint">Demo live counter</div>
-      </div>
-      <div class="stat">
-        <div class="label">Servers active</div>
-        <div class="value" id="serverCount">36</div>
-        <div class="hint">Premium dashboard vibe</div>
-      </div>
-      <div class="stat">
-        <div class="label">Players online</div>
-        <div class="value" id="playersCount">4,892</div>
-        <div class="hint">Auto updating showcase</div>
-      </div>
-      <div class="stat">
-        <div class="label">Uptime</div>
-        <div class="value" id="uptimeCount">99.98%</div>
-        <div class="hint">Free hosting feel</div>
-      </div>
-    </section>
+<div class="section-divider"></div>
 
-    <section class="section reveal" id="features">
-      <div class="section-head">
+<!-- ══════════════════════════════════════ -->
+<!-- HOW IT WORKS -->
+<!-- ══════════════════════════════════════ -->
+<section id="how">
+  <div class="container">
+    <div class="how-header reveal">
+      <div class="section-label">📋 Getting Started</div>
+      <h2 class="section-title">Live in <span class="accent-green">4 Simple Steps</span></h2>
+      <p class="section-sub" style="margin:0 auto">From zero to running server — it's never been this fast or this free. Here's how easy it is.</p>
+    </div>
+    <div class="steps-row">
+      <div class="step-card reveal">
+        <div class="step-num">01</div>
+        <div class="step-icon">💬</div>
+        <div class="step-title">Join Discord</div>
+        <p class="step-desc">Click "Get Started Free" and join our community Discord server. It's free and takes under 10 seconds.</p>
+      </div>
+      <div class="step-card reveal reveal-delay-1">
+        <div class="step-num">02</div>
+        <div class="step-icon">🖥️</div>
+        <div class="step-title">Request Server</div>
+        <p class="step-desc">Open a server request ticket in our Discord. Tell us your preferred version and server type.</p>
+      </div>
+      <div class="step-card reveal reveal-delay-2">
+        <div class="step-num">03</div>
+        <div class="step-icon">⚙️</div>
+        <div class="step-title">Configure Settings</div>
+        <p class="step-desc">Choose your server type, version, RAM, mods, plugins, and world settings. Fully customizable to your needs.</p>
+      </div>
+      <div class="step-card reveal reveal-delay-3">
+        <div class="step-num">04</div>
+        <div class="step-icon">🚀</div>
+        <div class="step-title">Launch &amp; Play</div>
+        <p class="step-desc">Your server goes live instantly. Get your IP address and invite your friends — you're ready to play!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- VIDEO SECTION -->
+<!-- ══════════════════════════════════════ -->
+<section id="video">
+  <div class="container">
+    <div class="video-header reveal">
+      <div class="section-label">🎬 Video Guide</div>
+      <h2 class="section-title">Watch Setup <span class="accent">in Action</span></h2>
+      <p class="section-sub" style="margin:0 auto">See exactly how to create, configure, and launch your free Minecraft server in under 2 minutes.</p>
+    </div>
+    <div class="video-wrapper reveal">
+      <div class="video-placeholder" id="videoPlaceholder" onclick="playVideo()">
+        <div class="video-play-btn">▶</div>
+        <div class="video-placeholder-text">Watch: Create Your Free Server</div>
+      </div>
+      <iframe class="video-embed" id="videoEmbed"
+        src=""
+        data-src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+        allow="autoplay; encrypted-media"
+        allowfullscreen></iframe>
+    </div>
+    <div class="video-cards">
+      <div class="video-card reveal">
+        <div class="video-card-icon">🖥️</div>
         <div>
-          <h2>Why this layout works</h2>
-          <p>Hero pe strong brand feel, premium dark UI aur mobile-first spacing. Free hosting, support aur protection par focus rakha gaya hai.</p>
+          <div class="video-card-title">Create Your Server</div>
+          <p class="video-card-desc">Follow along as we create a brand new server from scratch in the HDX-CLOUD panel — step by step.</p>
         </div>
       </div>
-
-      <div class="cards">
-        <article class="card">
-          <div class="icon">🕒</div>
-          <h3>24/7 support</h3>
-          <p>Users ko har time help milne ka trust dikhata hai. Support badge aur clean layout se page more professional lagta hai.</p>
-        </article>
-        <article class="card">
-          <div class="icon">🛡️</div>
-          <h3>DDoS protection</h3>
-          <p>Safe and stable hosting ka signal. Security-focused card users ko confidence deta hai ki server reliable hai.</p>
-        </article>
-        <article class="card">
-          <div class="icon">💻</div>
-          <h3>Mobile + PC support</h3>
-          <p>Android phone aur desktop dono par page polished dikhe. Responsive cards aur wide layout isko easy banate hain.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="section reveal" id="calculator">
-      <div class="section-head">
+      <div class="video-card reveal reveal-delay-1">
+        <div class="video-card-icon">🔌</div>
         <div>
-          <h2>Minecraft RAM calculator</h2>
-          <p>Ye section screenshot jaisa feel deta hai. Server type, player count aur mods select karke recommended RAM nikalta hai.</p>
+          <div class="video-card-title">Install Mods &amp; Plugins</div>
+          <p class="video-card-desc">See how simple it is to install your favorite plugins and mod packs directly from the control panel.</p>
         </div>
       </div>
+      <div class="video-card reveal reveal-delay-2">
+        <div class="video-card-icon">🌍</div>
+        <div>
+          <div class="video-card-title">Launch Your World</div>
+          <p class="video-card-desc">Start the server, grab your IP, and jump in-game with friends. The whole process under 2 minutes.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-      <div class="calc">
-        <div class="calc-box">
-          <div class="field">
-            <label for="version">Minecraft version <span class="subtext">latest or older</span></label>
-            <select id="version">
-              <option value="new">1.21 or newer</option>
-              <option value="mid">1.18 - 1.20</option>
-              <option value="old">1.17 or older</option>
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- RAM CALCULATOR -->
+<!-- ══════════════════════════════════════ -->
+<section id="calculator">
+  <div class="container">
+    <div class="calc-header reveal">
+      <div class="section-label">🧮 RAM Calculator</div>
+      <h2 class="section-title">Find Your <span class="accent">Ideal RAM</span></h2>
+      <p class="section-sub" style="margin:0 auto">Use our smart calculator to get the perfect RAM recommendation for your Minecraft server setup.</p>
+    </div>
+    <div class="calc-box reveal">
+      <div class="calc-grid">
+        <div class="calc-left">
+          <div class="calc-field">
+            <label class="calc-label">Minecraft Version</label>
+            <select class="calc-select" id="mcVersion" onchange="calcRAM()">
+              <option value="1.8">1.8 (Legacy)</option>
+              <option value="1.12">1.12.2 (Legacy)</option>
+              <option value="1.16">1.16.5 (Modern)</option>
+              <option value="1.18">1.18.2 (Modern)</option>
+              <option value="1.20" selected>1.20.x (Latest)</option>
+              <option value="1.21">1.21 (Snapshot)</option>
             </select>
           </div>
-
-          <div class="field">
-            <label>Server type <span class="subtext">choose one</span></label>
-            <div class="toggle-row" id="serverType">
-              <div class="seg active" data-type="vanilla">Vanilla</div>
-              <div class="seg" data-type="optimized">Optimized</div>
-              <div class="seg" data-type="modded">Modded</div>
-              <div class="seg" data-type="bedrock">Bedrock</div>
+          <div class="calc-field">
+            <label class="calc-label">Server Type</label>
+            <select class="calc-select" id="serverType" onchange="calcRAM()">
+              <option value="vanilla">Vanilla</option>
+              <option value="optimized" selected>Optimized (Paper/Purpur)</option>
+              <option value="modded">Modded (Forge/Fabric)</option>
+              <option value="bedrock">Bedrock</option>
+            </select>
+          </div>
+          <div class="calc-field">
+            <label class="calc-label">World Size / Map Scale</label>
+            <select class="calc-select" id="worldSize" onchange="calcRAM()">
+              <option value="small">Small (border 2000)</option>
+              <option value="medium" selected>Medium (border 5000)</option>
+              <option value="large">Large (border 10000+)</option>
+            </select>
+          </div>
+          <div class="calc-field">
+            <label class="calc-label">Player Count: <span id="playerLabel">15</span></label>
+            <div class="slider-row">
+              <input type="range" class="calc-slider" id="playerSlider" min="1" max="100" value="15" oninput="updateSlider('player');calcRAM()">
+              <span class="slider-val" id="playerVal">15</span>
             </div>
           </div>
-
-          <div class="field">
-            <label for="players">Player count <span class="subtext"><span id="playersLabel">2+</span></span></label>
-            <input id="players" type="range" min="2" max="40" value="2" />
-            <div class="range-row">
-              <span>2+</span><span>5+</span><span>15+</span><span>25+</span><span>40</span>
+          <div class="calc-field">
+            <label class="calc-label">Mod / Plugin Count: <span id="modsLabel">10</span></label>
+            <div class="slider-row">
+              <input type="range" class="calc-slider" id="modsSlider" min="0" max="200" value="10" oninput="updateSlider('mods');calcRAM()">
+              <span class="slider-val" id="modsVal">10</span>
             </div>
           </div>
-
-          <div class="field">
-            <label for="mods">Number of server mods <span class="subtext">optional</span></label>
-            <input id="mods" type="range" min="0" max="80" value="0" />
-            <div class="range-row">
-              <span>0</span><span>20</span><span>40</span><span>60</span><span>80</span>
-            </div>
-          </div>
-
-          <div class="field">
-            <label>Using optimization mods? <span class="subtext">helps reduce RAM</span></label>
-            <div class="toggle-row" id="optToggle">
-              <div class="seg active" data-opt="yes">Yes</div>
-              <div class="seg" data-opt="no">No</div>
+          <div class="calc-field">
+            <div class="toggle-row">
+              <span class="toggle-label">⚡ Optimization Enabled</span>
+              <div class="toggle on" id="optimToggle" onclick="this.classList.toggle('on');calcRAM()"></div>
             </div>
           </div>
         </div>
+        <div class="calc-right">
+          <div class="calc-result">
+            <div class="result-label">Recommended RAM</div>
+            <div>
+              <span class="result-ram" id="resultRam">2</span>
+              <span class="result-unit">GB</span>
+            </div>
+            <div class="result-chips" id="resultChips">
+              <span class="result-chip">✓ Paper</span>
+              <span class="result-chip">✓ Optimized</span>
+            </div>
+            <p class="result-note" id="resultNote">Perfect for a small to medium Paper server with basic plugins. Your setup is well-optimized for smooth gameplay.</p>
+          </div>
+          <div style="margin-top:20px;padding:20px;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:12px">
+            <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;font-weight:700">Resource Breakdown</div>
+            <div style="display:flex;flex-direction:column;gap:10px" id="breakdown">
+              <div style="display:flex;justify-content:space-between;font-size:13px">
+                <span style="color:var(--text-muted)">Base Java Process</span>
+                <span style="color:var(--text-primary);font-family:'JetBrains Mono',monospace;font-weight:600">512 MB</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:13px">
+                <span style="color:var(--text-muted)">World Chunks</span>
+                <span style="color:var(--text-primary);font-family:'JetBrains Mono',monospace;font-weight:600" id="bdChunks">256 MB</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:13px">
+                <span style="color:var(--text-muted)">Players</span>
+                <span style="color:var(--text-primary);font-family:'JetBrains Mono',monospace;font-weight:600" id="bdPlayers">384 MB</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:13px">
+                <span style="color:var(--text-muted)">Plugins / Mods</span>
+                <span style="color:var(--text-primary);font-family:'JetBrains Mono',monospace;font-weight:600" id="bdMods">128 MB</span>
+              </div>
+              <div style="height:1px;background:var(--border);margin:4px 0"></div>
+              <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:700">
+                <span style="color:var(--text-primary)">Total (with buffer)</span>
+                <span style="color:var(--cyan);font-family:'JetBrains Mono',monospace" id="bdTotal">2 GB</span>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:16px">
+            <a href="https://discord.gg/RJZgJFpASq" target="_blank" class="btn-primary" style="width:100%;justify-content:center">
+              <span>🚀 Launch with this Config</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <div class="result">
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- ACCESS MODES -->
+<!-- ══════════════════════════════════════ -->
+<section id="access">
+  <div class="container">
+    <div class="access-header reveal">
+      <div class="section-label">🌐 Access Options</div>
+      <h2 class="section-title">Choose Your <span class="accent">Setup Path</span></h2>
+      <p class="section-sub" style="margin:0 auto">Whether you're a complete beginner or a seasoned server admin, HDX-CLOUD has the right path for you.</p>
+    </div>
+    <div class="access-grid">
+      <div class="access-card reveal">
+        <div class="access-icon">🚀</div>
+        <div class="access-title">Quick Start</div>
+        <p class="access-desc">Perfect for beginners. Get online in minutes with zero configuration needed.</p>
+        <ul class="access-features">
+          <li>One-click server deployment</li>
+          <li>Pre-configured settings</li>
+          <li>Vanilla or Paper ready</li>
+          <li>Guided Discord setup</li>
+          <li>Community mentorship</li>
+        </ul>
+        <a href="https://discord.gg/RJZgJFpASq" target="_blank" class="btn-secondary" style="width:100%;justify-content:center">
+          Quick Setup →
+        </a>
+      </div>
+      <div class="access-card featured reveal reveal-delay-1">
+        <div class="access-icon">⚡</div>
+        <div class="access-title">Discord Setup</div>
+        <p class="access-desc">Join our community, open a ticket, and have a dedicated staff member set up your perfect server.</p>
+        <ul class="access-features">
+          <li>Personalized configuration</li>
+          <li>Staff-assisted setup</li>
+          <li>Custom mod &amp; plugin installs</li>
+          <li>Direct support channel</li>
+          <li>Priority queue access</li>
+        </ul>
+        <a href="https://discord.gg/RJZgJFpASq" target="_blank" class="btn-primary" style="width:100%;justify-content:center">
+          <span>Join Discord →</span>
+        </a>
+      </div>
+      <div class="access-card reveal reveal-delay-2">
+        <div class="access-icon">🔧</div>
+        <div class="access-title">Advanced Control</div>
+        <p class="access-desc">Full panel access for experienced server admins who need granular control over every setting.</p>
+        <ul class="access-features">
+          <li>Full file manager access</li>
+          <li>Console &amp; log access</li>
+          <li>Custom JAR uploads</li>
+          <li>Manual configuration</li>
+          <li>Backup &amp; restore</li>
+        </ul>
+        <a href="https://discord.gg/RJZgJFpASq" target="_blank" class="btn-secondary" style="width:100%;justify-content:center">
+          Advanced Setup →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- COMPARISON -->
+<!-- ══════════════════════════════════════ -->
+<section id="comparison">
+  <div class="container">
+    <div class="comparison-header reveal">
+      <div class="section-label">⚖ Comparison</div>
+      <h2 class="section-title">HDX-CLOUD <span class="accent">vs The Rest</span></h2>
+      <p class="section-sub" style="margin:0 auto">See why thousands of players choose HDX-CLOUD over other free and paid hosting options.</p>
+    </div>
+    <div class="comp-table-wrapper reveal">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th style="text-align:left">Feature</th>
+            <th class="hdx">⬡ HDX-CLOUD</th>
+            <th>Other Free Hosts</th>
+            <th>Paid Hosts</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="feature-name">Free-Only Access</td>
+            <td><span class="check-yes">✔</span></td>
+            <td><span class="check-partial">~</span></td>
+            <td><span class="check-no">✘</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">DDoS Protection</td>
+            <td><span class="check-yes">✔</span></td>
+            <td><span class="check-no">✘</span></td>
+            <td><span class="check-yes">✔</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">24/7 Live Support</td>
+            <td><span class="check-yes">✔</span></td>
+            <td><span class="check-no">✘</span></td>
+            <td><span class="check-yes">✔</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">Discord Onboarding</td>
+            <td><span class="check-yes">✔</span></td>
+            <td><span class="check-no">✘</span></td>
+            <td><span class="check-no">✘</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">Java &amp; Bedrock</td>
+            <td><span class="check-yes">✔</span></td>
+            <td><span class="check-partial">~</span></td>
+            <td><span class="check-yes">✔</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">Plugin / Mod Support</td>
+            <td><span class="check-yes">✔</span></td>
+            <td><span class="check-partial">~</span></td>
+            <td><span class="check-yes">✔</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">SSD Storage</td>
+            <td><span class="check-yes">✔</span></td>
+            <td><span class="check-no">✘</span></td>
+            <td><span class="check-yes">✔</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">Instant Setup (&lt;2 min)</td>
+            <td><span class="check-yes">✔</span></td>
+            <td><span class="check-no">✘</span></td>
+            <td><span class="check-partial">~</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">Mobile &amp; PC Panel</td>
+            <td><span class="check-yes">✔</span></td>
+            <td><span class="check-partial">~</span></td>
+            <td><span class="check-yes">✔</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">No Watermarks / Ads</td>
+            <td><span class="check-yes">✔</span></td>
+            <td><span class="check-no">✘</span></td>
+            <td><span class="check-yes">✔</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SECURITY -->
+<!-- ══════════════════════════════════════ -->
+<section id="security">
+  <div class="container">
+    <div class="security-header reveal">
+      <div class="section-label">🛡 Security</div>
+      <h2 class="section-title">Protected From <span class="accent-green">Every Angle</span></h2>
+      <p class="section-sub" style="margin:0 auto">Your server's safety is our priority. HDX-CLOUD runs multiple layers of protection so you can focus on playing.</p>
+    </div>
+    <div class="security-grid">
+      <div class="security-card reveal">
+        <div class="security-icon">🛡️</div>
+        <div class="security-title">DDoS Mitigation</div>
+        <p class="security-desc">Multi-layer attack filtering absorbs volumetric floods and application-layer attacks before they reach your server.</p>
+      </div>
+      <div class="security-card reveal reveal-delay-1">
+        <div class="security-icon">🔐</div>
+        <div class="security-title">Secure Access</div>
+        <p class="security-desc">Auth-protected panel access with optional two-factor authentication. Only you control your server.</p>
+      </div>
+      <div class="security-card reveal reveal-delay-2">
+        <div class="security-icon">📁</div>
+        <div class="security-title">File Safety</div>
+        <p class="security-desc">Isolated server environments prevent cross-contamination. Your files are sandboxed and protected at all times.</p>
+      </div>
+      <div class="security-card reveal">
+        <div class="security-icon">📊</div>
+        <div class="security-title">Uptime Monitoring</div>
+        <p class="security-desc">Real-time health checks auto-restart crashed servers and notify staff instantly so downtime stays minimal.</p>
+      </div>
+      <div class="security-card reveal reveal-delay-1">
+        <div class="security-icon">🤝</div>
+        <div class="security-title">Community Onboarding</div>
+        <p class="security-desc">Verified Discord onboarding reduces bad actors and keeps our platform safe and welcoming for all players.</p>
+      </div>
+      <div class="security-card reveal reveal-delay-2">
+        <div class="security-icon">💾</div>
+        <div class="security-title">World Backups</div>
+        <p class="security-desc">Automated backup scheduling means your world data is always recoverable in case anything goes wrong.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- PERFORMANCE -->
+<!-- ══════════════════════════════════════ -->
+<section id="performance">
+  <div class="container">
+    <div class="perf-header reveal">
+      <div class="section-label">⚡ Performance</div>
+      <h2 class="section-title">Raw Speed. <span class="accent">Real Results.</span></h2>
+      <p class="section-sub" style="margin:0 auto">Our hosting infrastructure is engineered for performance. Here's what you can actually expect from HDX-CLOUD.</p>
+    </div>
+    <div class="perf-grid">
+      <div class="perf-metrics reveal">
+        <div class="perf-metric">
+          <div class="perf-metric-header">
+            <span class="perf-metric-name">Server Uptime</span>
+            <span class="perf-metric-val">99.9%</span>
+          </div>
+          <div class="perf-track"><div class="perf-fill" style="width:0" data-width="99.9%"></div></div>
+        </div>
+        <div class="perf-metric">
+          <div class="perf-metric-header">
+            <span class="perf-metric-name">Network Reliability</span>
+            <span class="perf-metric-val">98.5%</span>
+          </div>
+          <div class="perf-track"><div class="perf-fill green" style="width:0" data-width="98.5%"></div></div>
+        </div>
+        <div class="perf-metric">
+          <div class="perf-metric-header">
+            <span class="perf-metric-name">Setup Success Rate</span>
+            <span class="perf-metric-val">97%</span>
+          </div>
+          <div class="perf-track"><div class="perf-fill" style="width:0" data-width="97%"></div></div>
+        </div>
+        <div class="perf-metric">
+          <div class="perf-metric-header">
+            <span class="perf-metric-name">Support Satisfaction</span>
+            <span class="perf-metric-val">96%</span>
+          </div>
+          <div class="perf-track"><div class="perf-fill green" style="width:0" data-width="96%"></div></div>
+        </div>
+        <div class="perf-metric">
+          <div class="perf-metric-header">
+            <span class="perf-metric-name">SSD Read/Write Speed</span>
+            <span class="perf-metric-val">3.5 GB/s</span>
+          </div>
+          <div class="perf-track"><div class="perf-fill" style="width:0" data-width="90%"></div></div>
+        </div>
+      </div>
+      <div class="perf-cards reveal reveal-delay-2">
+        <div class="perf-card">
+          <div class="perf-card-icon">⚡</div>
+          <div class="perf-card-val">&lt;5ms</div>
+          <div class="perf-card-label">Average Latency</div>
+        </div>
+        <div class="perf-card">
+          <div class="perf-card-icon">🚀</div>
+          <div class="perf-card-val">90s</div>
+          <div class="perf-card-label">Setup Time</div>
+        </div>
+        <div class="perf-card">
+          <div class="perf-card-icon">💾</div>
+          <div class="perf-card-val">NVMe</div>
+          <div class="perf-card-label">Storage Type</div>
+        </div>
+        <div class="perf-card">
+          <div class="perf-card-icon">📡</div>
+          <div class="perf-card-val">10Gbps</div>
+          <div class="perf-card-label">Network Uplink</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SUPPORTED TYPES -->
+<!-- ══════════════════════════════════════ -->
+<section id="supported">
+  <div class="container">
+    <div class="supported-header reveal">
+      <div class="section-label">🎮 Supported Setups</div>
+      <h2 class="section-title">Every Server Type. <span class="accent">All Supported.</span></h2>
+      <p class="section-sub" style="margin:0 auto">From vanilla survival to fully modded adventure servers — HDX-CLOUD handles every setup type with ease.</p>
+    </div>
+    <div class="supported-grid">
+      <div class="support-card reveal"><div class="support-icon">🌿</div><div class="support-name">Vanilla</div><div class="support-desc">Pure Minecraft</div></div>
+      <div class="support-card reveal reveal-delay-1"><div class="support-icon">📜</div><div class="support-name">Paper</div><div class="support-desc">Optimized forks</div></div>
+      <div class="support-card reveal reveal-delay-2"><div class="support-icon">🌀</div><div class="support-name">Spigot</div><div class="support-desc">Plugin-ready</div></div>
+      <div class="support-card reveal reveal-delay-3"><div class="support-icon">⚒️</div><div class="support-name">Forge</div><div class="support-desc">Mod platform</div></div>
+      <div class="support-card reveal"><div class="support-icon">🧵</div><div class="support-name">Fabric</div><div class="support-desc">Lightweight mods</div></div>
+      <div class="support-card reveal reveal-delay-1"><div class="support-icon">📱</div><div class="support-name">Bedrock</div><div class="support-desc">Cross-platform</div></div>
+      <div class="support-card reveal reveal-delay-2"><div class="support-icon">🔌</div><div class="support-name">Plugins</div><div class="support-desc">Bukkit/Spigot API</div></div>
+      <div class="support-card reveal reveal-delay-3"><div class="support-icon">📦</div><div class="support-name">Modpacks</div><div class="support-desc">ATM9, Sky Factory &amp; more</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- DISCORD COMMUNITY -->
+<!-- ══════════════════════════════════════ -->
+<section id="community">
+  <div class="container">
+    <div class="community-box reveal">
+      <div class="community-discord-icon">💬</div>
+      <h2 class="community-title">Join the HDX-CLOUD Community</h2>
+      <p class="community-desc">A thriving community of Minecraft server owners, builders, and players — all ready to help, share, and grow together. Our Discord is where it all starts.</p>
+      <div class="community-stats">
+        <div class="community-stat">
+          <span class="community-stat-num">8.4K+</span>
+          <span class="community-stat-label">Members</span>
+        </div>
+        <div class="community-stat">
+          <span class="community-stat-num">24/7</span>
+          <span class="community-stat-label">Support Active</span>
+        </div>
+        <div class="community-stat">
+          <span class="community-stat-num">3.1K+</span>
+          <span class="community-stat-label">Servers Running</span>
+        </div>
+      </div>
+      <div class="community-btns">
+        <a href="https://discord.gg/RJZgJFpASq" target="_blank" class="btn-primary btn-lg">
+          <span>💬 Join Discord Now</span>
+        </a>
+        <a href="https://discord.gg/RJZgJFpASq" target="_blank" class="btn-secondary btn-lg">
+          <span>🚀 Start Free Server</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- TESTIMONIALS -->
+<!-- ══════════════════════════════════════ -->
+<section id="testimonials">
+  <div class="container">
+    <div class="test-header reveal">
+      <div class="section-label">⭐ Reviews</div>
+      <h2 class="section-title">What Our <span class="accent">Players Say</span></h2>
+      <p class="section-sub" style="margin:0 auto">Don't just take our word for it — here's what real HDX-CLOUD users have to say about their experience.</p>
+    </div>
+    <div class="test-grid">
+      <div class="test-card reveal">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-text">I've tried five different free hosting services and none of them came close to HDX-CLOUD. Setup was done in literally under 2 minutes through Discord and my server has been running flawlessly for 3 weeks straight.</p>
+        <div class="test-author">
+          <div class="test-avatar">A</div>
           <div>
-            <h3>Recommended RAM</h3>
-            <p id="recommendText">For a tiny Vanilla free server, the calculator suggests around 2 GB RAM.</p>
+            <div class="test-name">_AlexCraft</div>
+            <div class="test-role">Survival Server Owner</div>
           </div>
-
-          <div class="rec">
-            <div class="k">Best package for this setup</div>
-            <div class="v" id="ramValue">2 GB</div>
-            <div class="k" id="ramNote">Light server • low player count • fast startup</div>
-          </div>
-
+        </div>
+      </div>
+      <div class="test-card reveal reveal-delay-1">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-text">Running a 15-player Forge modpack server for free with no lag at all. I honestly can't believe this is free. The support team in Discord answered every question I had within minutes. Highly recommend.</p>
+        <div class="test-author">
+          <div class="test-avatar">Z</div>
           <div>
-            <div class="chips">
-              <span class="chip" id="chipType">Vanilla</span>
-              <span class="chip" id="chipPlayers">2+ players</span>
-              <span class="chip" id="chipMods">0 mods</span>
-              <span class="chip" id="chipOpt">Optimization: Yes</span>
-            </div>
+            <div class="test-name">ZephyrBuilds</div>
+            <div class="test-role">Modded Server Admin</div>
           </div>
         </div>
       </div>
-    </section>
-
-    <section class="section reveal">
-      <div class="section-head">
-        <div>
-          <h2>Feature comparison</h2>
-          <p>Ye block trust build karta hai. Pricing nahi, sirf free hosting ke strong benefits aur clean comparison diya gaya hai.</p>
-        </div>
-      </div>
-
-      <div class="compare">
-        <div class="table">
-          <div class="row head">
-            <div>Feature</div>
-            <div>HDX-CLOUD</div>
-            <div>Other free hosts</div>
-            <div>Paid hosts</div>
-          </div>
-          <div class="row">
-            <div>Free-only landing</div>
-            <div class="ok">✓</div>
-            <div class="no">×</div>
-            <div class="no">×</div>
-          </div>
-          <div class="row">
-            <div>24/7 support</div>
-            <div class="ok">✓</div>
-            <div class="muted">Sometimes</div>
-            <div class="ok">✓</div>
-          </div>
-          <div class="row">
-            <div>DDoS protection</div>
-            <div class="ok">✓</div>
-            <div class="no">×</div>
-            <div class="ok">✓</div>
-          </div>
-          <div class="row">
-            <div>Mobile + PC support</div>
-            <div class="ok">✓</div>
-            <div class="muted">Limited</div>
-            <div class="ok">✓</div>
+      <div class="test-card reveal">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-text">As a complete beginner I was nervous about setting up a server. The HDX-CLOUD Discord staff walked me through every step and I had a Paper server online with EssentialsX installed in about 5 minutes. Incredible service.</p>
+        <div class="test-author">
+          <div class="test-avatar">M</div>
+          <div>
+            <div class="test-name">MiningMara</div>
+            <div class="test-role">New Server Owner</div>
           </div>
         </div>
       </div>
-    </section>
+      <div class="test-card reveal reveal-delay-1">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-text">DDoS protection on a free host? I was skeptical but during an attack last month my server stayed online without a hiccup. The team is professional, responsive and the infrastructure is genuinely solid.</p>
+        <div class="test-author">
+          <div class="test-avatar">R</div>
+          <div>
+            <div class="test-name">RiftDev_MC</div>
+            <div class="test-role">Network Administrator</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <section class="cta reveal">
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- FAQ -->
+<!-- ══════════════════════════════════════ -->
+<section id="faq">
+  <div class="container">
+    <div class="faq-header reveal">
+      <div class="section-label">❓ FAQ</div>
+      <h2 class="section-title">Frequently Asked <span class="accent">Questions</span></h2>
+      <p class="section-sub" style="margin:0 auto">Got questions? We've got answers. If you don't find what you're looking for, our Discord team is always available.</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item open reveal">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+          <span class="faq-q-text">Is the hosting really completely free?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Yes — <strong>100% free</strong>, no credit card required, no hidden fees, no paid upgrades. HDX-CLOUD is a community-driven platform offering free Minecraft hosting to everyone. We don't have paid tiers because we believe everyone deserves a free server.</p>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+          <span class="faq-q-text">How do I get started?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Simply click any <strong>"Get Started Free"</strong> button on this page, which will take you to our Discord server. Once there, verify yourself and open a server request ticket. Our staff will set up your server and provide connection details within minutes.</p>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+          <span class="faq-q-text">Do you support both Java and Bedrock editions?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Yes! HDX-CLOUD supports both <strong>Java Edition</strong> and <strong>Bedrock Edition</strong> servers. We also support Geyser/Floodgate setups that allow cross-play between Java and Bedrock players on the same server.</p>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+          <span class="faq-q-text">Can I install mods and plugins?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Absolutely. We support <strong>Bukkit, Spigot, Paper, Forge, Fabric</strong>, and popular modpacks. You can install plugins and mods via the file manager or request our staff to install them for you through Discord. No restrictions on what you can run.</p>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+          <span class="faq-q-text">Is there DDoS protection?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Yes, all HDX-CLOUD servers include <strong>enterprise-grade DDoS protection</strong> at no extra cost. Our network filtering absorbs attack traffic before it reaches your server, keeping it online even during active attacks.</p>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+          <span class="faq-q-text">Is Discord required to use HDX-CLOUD?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Yes, Discord is our primary platform for server management, support, and communication. It acts as your <strong>onboarding portal and support hub</strong>. Discord accounts are free and the setup takes under 30 seconds if you don't already have one.</p>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+          <span class="faq-q-text">How fast is the setup process?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Most servers are set up within <strong>under 2 minutes</strong> after submitting your request. During busy periods it may take up to 10 minutes. Our average setup time across all users is just 90 seconds from request to live server.</p>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+          <span class="faq-q-text">Can I manage my server from mobile?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Yes! Our control panel is fully <strong>mobile-responsive</strong>. You can start, stop, restart your server, view console logs, manage files, and check player activity from any smartphone or tablet browser without any issues.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- FINAL CTA -->
+<!-- ══════════════════════════════════════ -->
+<section id="cta">
+  <div class="container">
+    <div class="cta-box reveal">
+      <div class="cta-label section-label">🚀 Ready to Launch?</div>
+      <h2 class="cta-title">
+        <span class="line1">Ready to Launch Your</span>
+        <span class="line2">Free Server Today?</span>
+      </h2>
+      <p class="cta-desc">Join over 8,000 players who already run their Minecraft servers on HDX-CLOUD — completely free, forever. No credit card. No waiting. Just play.</p>
+      <div class="cta-btns">
+        <a href="https://discord.gg/RJZgJFpASq" target="_blank" class="btn-primary btn-xl">
+          <span>🚀 Get Started Free</span>
+        </a>
+        <a href="https://discord.gg/RJZgJFpASq" target="_blank" class="btn-secondary btn-xl">
+          <span>💬 Join Discord</span>
+        </a>
+      </div>
+      <p class="cta-sub">⬡ Free forever · No credit card · Setup in under 2 minutes · 8,400+ servers created</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- FOOTER -->
+<!-- ══════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
       <div>
-        <h3>Ready to build the free hosting version?</h3>
-        <p>Is code ko base bana ke aap banner, login button, server panels aur real backend baad me add kar sakte ho. Abhi ye HDX-CLOUD style premium front page jaisa look dega.</p>
+        <a href="#home" class="footer-brand-logo">
+          <div class="logo-icon" style="width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,var(--cyan),var(--blue));display:flex;align-items:center;justify-content:center;font-size:14px">⬡</div>
+          HDX<span style="color:var(--green)">-CLOUD</span>
+        </a>
+        <p class="footer-tagline">Free Minecraft hosting for everyone. Built on community, powered by passion. Join thousands of players already online.</p>
+        <div class="footer-social">
+          <a href="https://discord.gg/RJZgJFpASq" target="_blank" class="social-btn" title="Discord">💬</a>
+          <a href="#" class="social-btn" title="Twitter">🐦</a>
+          <a href="#" class="social-btn" title="YouTube">📺</a>
+          <a href="#" class="social-btn" title="GitHub">🐙</a>
+        </div>
       </div>
-      <a class="btn btn-primary" href="#top">Launch Page →</a>
-    </section>
-  </main>
+      <div>
+        <div class="footer-col-title">Platform</div>
+        <ul class="footer-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#panel">Control Panel</a></li>
+          <li><a href="#supported">Supported Types</a></li>
+          <li><a href="#performance">Performance</a></li>
+          <li><a href="#security">Security</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Resources</div>
+        <ul class="footer-links">
+          <li><a href="#how">How It Works</a></li>
+          <li><a href="#calculator">RAM Calculator</a></li>
+          <li><a href="#video">Setup Video</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#comparison">Compare</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Community</div>
+        <ul class="footer-links">
+          <li><a href="https://discord.gg/RJZgJFpASq" target="_blank">Discord Server</a></li>
+          <li><a href="#community">Community Hub</a></li>
+          <li><a href="#testimonials">Reviews</a></li>
+          <li><a href="https://discord.gg/RJZgJFpASq" target="_blank">Get Support</a></li>
+          <li><a href="https://discord.gg/RJZgJFpASq" target="_blank">Launch Server</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2024 <span>HDX-CLOUD</span>. All rights reserved. Free Minecraft hosting platform.</div>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="https://discord.gg/RJZgJFpASq" target="_blank">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
 
-  <footer class="footer">
-    HDX-CLOUD · Free Minecraft Hosting Landing Page
-  </footer>
+<!-- ══════════════════════════════════════ -->
+<!-- JAVASCRIPT -->
+<!-- ══════════════════════════════════════ -->
+<script>
+/* ── MOBILE MENU ── */
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobileMenu');
+  const overlay = document.getElementById('mobileOverlay');
+  const hamburger = document.getElementById('hamburger');
+  menu.classList.toggle('open');
+  overlay.classList.toggle('open');
+  hamburger.classList.toggle('open');
+}
+function closeMobileMenu() {
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('mobileOverlay').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+}
 
-  <script>
-    const revealEls = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('show');
-      });
-    }, { threshold: 0.15 });
-    revealEls.forEach(el => observer.observe(el));
+/* ── SCROLL NAV HIGHLIGHT ── */
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  navbar.classList.toggle('scrolled', scrollY > 30);
+  let current = '';
+  sections.forEach(sec => {
+    const top = sec.offsetTop - 100;
+    if (scrollY >= top) current = sec.getAttribute('id');
+  });
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+  });
+});
 
-    // counters
-    let online = 128, servers = 36, players = 4892, uptime = 99.98;
-    const onlineEl = document.getElementById('onlineCount');
-    const serverEl = document.getElementById('serverCount');
-    const playersEl = document.getElementById('playersCount');
-    const uptimeEl = document.getElementById('uptimeCount');
-
-    function tickCounters(){
-      online = Math.max(90, Math.min(220, online + Math.floor(Math.random() * 9) - 3));
-      servers = Math.max(20, Math.min(90, servers + Math.floor(Math.random() * 5) - 2));
-      players = Math.max(800, Math.min(9200, players + Math.floor(Math.random() * 140) - 60));
-      uptime = Math.max(99.70, Math.min(99.999, uptime + (Math.random() * 0.02 - 0.004)));
-
-      onlineEl.textContent = online.toLocaleString();
-      serverEl.textContent = servers.toLocaleString();
-      playersEl.textContent = players.toLocaleString();
-      uptimeEl.textContent = uptime.toFixed(2) + '%';
+/* ── SCROLL REVEAL ── */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
     }
-    tickCounters();
-    setInterval(tickCounters, 3500);
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-    // calculator
-    const versionEl = document.getElementById('version');
-    const playersRange = document.getElementById('players');
-    const modsRange = document.getElementById('mods');
-    const serverTypeWrap = document.getElementById('serverType');
-    const optWrap = document.getElementById('optToggle');
-
-    const ramValue = document.getElementById('ramValue');
-    const ramNote = document.getElementById('ramNote');
-    const recommendText = document.getElementById('recommendText');
-    const playersLabel = document.getElementById('playersLabel');
-
-    const chipType = document.getElementById('chipType');
-    const chipPlayers = document.getElementById('chipPlayers');
-    const chipMods = document.getElementById('chipMods');
-    const chipOpt = document.getElementById('chipOpt');
-
-    let serverType = 'vanilla';
-    let optimization = 'yes';
-
-    function calcRAM(){
-      const version = versionEl.value;
-      const players = Number(playersRange.value);
-      const mods = Number(modsRange.value);
-
-      let ram = 2;
-
-      if(serverType === 'optimized') ram = 2;
-      if(serverType === 'bedrock') ram = 1;
-      if(serverType === 'modded') ram = 4;
-
-      if(players >= 5) ram += 1;
-      if(players >= 15) ram += 1;
-      if(players >= 25) ram += 2;
-      if(players >= 35) ram += 2;
-
-      ram += Math.floor(mods / 15) * 1;
-
-      if(version === 'new') ram += 1;
-      if(version === 'old') ram -= 0.5;
-
-      if(optimization === 'yes') ram -= 1;
-
-      ram = Math.max(1, Math.min(16, Math.round(ram * 2) / 2));
-
-      ramValue.textContent = ram + ' GB';
-
-      let note = 'Great for a small free server.';
-      if(ram <= 2) note = 'Light server • low player count • fast startup';
-      else if(ram <= 4) note = 'Balanced free server • stable gameplay';
-      else if(ram <= 8) note = 'Heavier world • plugins or small modpack';
-      else note = 'Large setup • bigger worlds and more players';
-
-      if(serverType === 'bedrock') note = 'Bedrock setup • lower RAM use';
-      if(serverType === 'modded') note = 'Modded setup • more RAM recommended';
-
-      ramNote.textContent = note;
-
-      const typeLabel = serverType.charAt(0).toUpperCase() + serverType.slice(1);
-      chipType.textContent = typeLabel;
-      chipPlayers.textContent = players + '+ players';
-      chipMods.textContent = mods + ' mods';
-      chipOpt.textContent = 'Optimization: ' + (optimization === 'yes' ? 'Yes' : 'No');
-
-      const vtxt = version === 'new' ? '1.21+ version' : version === 'mid' ? '1.18–1.20 version' : 'older version';
-      let baseText = `For a ${typeLabel} free server on ${vtxt} with ${players} players, the recommended RAM is about ${ram} GB.`;
-      if(mods > 0) baseText += ` You added ${mods} mods, so extra memory is useful.`;
-      recommendText.textContent = baseText;
+/* ── STAT COUNTERS ── */
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target);
+  const suffix = el.dataset.suffix || '';
+  const duration = 2000;
+  const step = target / (duration / 16);
+  let current = 0;
+  const timer = setInterval(() => {
+    current += step;
+    if (current >= target) {
+      current = target;
+      clearInterval(timer);
     }
+    el.textContent = Math.floor(current).toLocaleString() + suffix;
+  }, 16);
+}
+const statObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateCounter(entry.target);
+      statObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.stat-number').forEach(el => statObserver.observe(el));
 
-    playersRange.addEventListener('input', () => {
-      playersLabel.textContent = playersRange.value + '+';
-      calcRAM();
-    });
-    modsRange.addEventListener('input', calcRAM);
-    versionEl.addEventListener('change', calcRAM);
-
-    serverTypeWrap.querySelectorAll('.seg').forEach(btn => {
-      btn.addEventListener('click', () => {
-        serverTypeWrap.querySelectorAll('.seg').forEach(x => x.classList.remove('active'));
-        btn.classList.add('active');
-        serverType = btn.dataset.type;
-        calcRAM();
+/* ── PERFORMANCE BARS ── */
+const perfObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.perf-fill').forEach(bar => {
+        bar.style.width = bar.dataset.width;
       });
-    });
+      perfObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+const perfSection = document.getElementById('performance');
+if (perfSection) perfObserver.observe(perfSection);
 
-    optWrap.querySelectorAll('.seg').forEach(btn => {
-      btn.addEventListener('click', () => {
-        optWrap.querySelectorAll('.seg').forEach(x => x.classList.remove('active'));
-        btn.classList.add('active');
-        optimization = btn.dataset.opt;
-        calcRAM();
-      });
-    });
+/* ── FAQ ACCORDION ── */
+function toggleFAQ(el) {
+  const item = el.closest('.faq-item');
+  const allItems = document.querySelectorAll('.faq-item');
+  const isOpen = item.classList.contains('open');
+  allItems.forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
 
-    calcRAM();
-  </script>
+/* ── VIDEO PLAYER ── */
+function playVideo() {
+  const placeholder = document.getElementById('videoPlaceholder');
+  const embed = document.getElementById('videoEmbed');
+  embed.src = embed.dataset.src;
+  placeholder.style.display = 'none';
+  embed.style.display = 'block';
+}
+
+/* ── RAM CALCULATOR ── */
+function updateSlider(type) {
+  const slider = document.getElementById(type + 'Slider');
+  const val = document.getElementById(type + 'Val');
+  const label = document.getElementById(type + 'Label');
+  val.textContent = slider.value;
+  if (label) label.textContent = slider.value;
+}
+
+function calcRAM() {
+  const version = document.getElementById('mcVersion').value;
+  const type = document.getElementById('serverType').value;
+  const players = parseInt(document.getElementById('playerSlider').value);
+  const mods = parseInt(document.getElementById('modsSlider').value);
+  const worldSize = document.getElementById('worldSize').value;
+  const optimized = document.getElementById('optimToggle').classList.contains('on');
+
+  // Base RAM
+  let base = 512; // MB
+
+  // Version multiplier
+  const verMult = { '1.8': 0.7, '1.12': 0.85, '1.16': 1.0, '1.18': 1.15, '1.20': 1.2, '1.21': 1.25 };
+  const vMult = verMult[version] || 1.0;
+
+  // Type base
+  const typeBases = { vanilla: 512, optimized: 400, modded: 800, bedrock: 350 };
+  base = typeBases[type];
+
+  // Player RAM
+  const perPlayerRAM = type === 'modded' ? 35 : 22;
+  const playerRAM = players * perPlayerRAM;
+
+  // Mods RAM
+  const perModRAM = type === 'modded' ? 8 : 4;
+  const modsRAM = mods * perModRAM;
+
+  // World size
+  const worldMult = { small: 0.8, medium: 1.0, large: 1.4 };
+  const chunkRAM = Math.round(256 * worldMult[worldSize] * vMult);
+
+  // Optimization bonus
+  const optDiv = optimized ? 0.82 : 1.0;
+
+  let total = (base + playerRAM + modsRAM + chunkRAM) * vMult * optDiv;
+  // Add 20% buffer
+  total = total * 1.2;
+
+  // Round to nearest 512MB
+  let roundedMB = Math.ceil(total / 512) * 512;
+  let gb = (roundedMB / 1024).toFixed(roundedMB % 1024 === 0 ? 0 : 1);
+
+  // Output
+  document.getElementById('resultRam').textContent = gb;
+  document.getElementById('bdChunks').textContent = chunkRAM + ' MB';
+  document.getElementById('bdPlayers').textContent = playerRAM + ' MB';
+  document.getElementById('bdMods').textContent = modsRAM + ' MB';
+  document.getElementById('bdTotal').textContent = gb + ' GB';
+
+  // Chips
+  const chips = [];
+  if (type === 'optimized') chips.push('✓ Paper', '✓ Purpur');
+  if (type === 'modded') chips.push('✓ Forge', '✓ Fabric');
+  if (type === 'bedrock') chips.push('✓ Bedrock');
+  if (type === 'vanilla') chips.push('✓ Vanilla');
+  if (optimized) chips.push('✓ Optimized');
+  if (players > 50) chips.push('⚠ High Player Count');
+  if (mods > 100) chips.push('⚠ Heavy Mods');
+  document.getElementById('resultChips').innerHTML = chips.map(c => `<span class="result-chip">${c}</span>`).join('');
+
+  // Note
+  let note = '';
+  const gbNum = parseFloat(gb);
+  if (gbNum <= 1) note = 'Lightweight setup. Perfect for small private servers with a handful of friends.';
+  else if (gbNum <= 2) note = 'Solid allocation for a small to medium server. Expect smooth gameplay with this configuration.';
+  else if (gbNum <= 4) note = 'Well-resourced server for a busy community or mod-heavy setup. Performance should be excellent.';
+  else if (gbNum <= 8) note = 'High-resource allocation for a large modded or highly populated server. Consider optimizing JVM flags.';
+  else note = 'Very high resource requirement. Make sure your setup genuinely needs this much — consider reducing mods or player slots.';
+  document.getElementById('resultNote').textContent = note;
+}
+
+// Init calculator
+calcRAM();
+
+/* ── LIVE DASHBOARD ANIMATION ── */
+function animateDashboard() {
+  const cpuBar = document.getElementById('cpuBar');
+  const cpuVal = document.getElementById('cpuVal');
+  const ramBar = document.getElementById('ramBar');
+  const ramVal = document.getElementById('ramVal');
+  if (!cpuBar) return;
+  setInterval(() => {
+    const cpu = Math.floor(20 + Math.random() * 45);
+    const ram = Math.floor(50 + Math.random() * 30);
+    const ramGB = (ram / 100 * 2).toFixed(1);
+    cpuBar.style.width = cpu + '%';
+    cpuVal.textContent = cpu + '%';
+    ramBar.style.width = ram + '%';
+    ramVal.textContent = ramGB + ' GB / 2 GB';
+  }, 3000);
+}
+animateDashboard();
+
+/* ── SMOOTH SCROLL ── */
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    const href = this.getAttribute('href');
+    if (href === '#') return;
+    const target = document.querySelector(href);
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
 </body>
 </html>
