@@ -1,0 +1,6 @@
+{
+  "name": "HDX-CLOUD",
+  "description": "Premium Game Hosting, High-Performance VPS, and Cloud Infrastructure built for gamers and developers. Enterprise-grade protection, instant setup, and ultra-low latency.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
